@@ -201,6 +201,11 @@ function AssessmentIntro() {
           <Link
             to="/assessment/questions"
             className="assessment-begin-button"
+            onClick={() => {
+              localStorage.removeItem(
+                "neuromatrix_assessment_answers"
+              );
+            }}
           >
             Begin Assessment
             <span>→</span>

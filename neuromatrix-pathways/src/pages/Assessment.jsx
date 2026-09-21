@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import grade8 from "../assessments/grade8";
@@ -64,7 +64,15 @@ function Assessment() {
 
   const [currentPage, setCurrentPage] = useState(0);
 
-  const [answers, setAnswers] = useState({});
+  const [answers, setAnswers] = useState(() => {
+    const savedAnswers = localStorage.getItem(
+      "neuromatrix_assessment_answers"
+    );
+
+    return savedAnswers
+      ? JSON.parse(savedAnswers)
+      : {};
+  });
 
   const totalPages = Math.ceil(
     questions.length / QUESTIONS_PER_PAGE
