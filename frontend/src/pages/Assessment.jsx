@@ -1,66 +1,22 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import grade8 from "../assessments/grade8";
-import grade9 from "../assessments/grade9";
-import grade10 from "../assessments/grade10";
-import grade11 from "../assessments/grade11";
-import grade12 from "../assessments/grade12";
-import pursuingUG from "../assessments/pursuingUG";
-import completedUG from "../assessments/completedUG";
+import { getAssessment } from "../api/assessments";
 
 import "../App.css";
 
-const assessments = {
-  "8th": grade8,
-  "9th": grade9,
-  "10th": grade10,
-  "11th": grade11,
-  "12th": grade12,
-  "pursuing-ug": pursuingUG,
-  "completed-ug": completedUG,
-};
-
-const scaleOptions = [
-  {
-    value: 1,
-    label: "Strongly Agree",
-  },
-  {
-    value: 2,
-    label: "Agree",
-  },
-  {
-    value: 3,
-    label: "Neutral",
-  },
-  {
-    value: 4,
-    label: "Disagree",
-  },
-  {
-    value: 5,
-    label: "Strongly Disagree",
-  },
-];
-
 const QUESTIONS_PER_PAGE = 10;
+
+// Temporary during backend integration.
+// Later this will come dynamically from the user's profile/route.
+const ASSESSMENT_SLUG = "neuromatrix-personality";
 
 function Assessment() {
   const navigate = useNavigate();
 
-  /*
-    Temporary status.
-
-    Later this will come from:
-    logged-in user → profile.status
-  */
-
-  const studentStatus = "10th";
-
-  const assessment = assessments[studentStatus];
-
-  const questions = assessment.questions;
+  const [assessment, setAssessment] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(0);
 
@@ -69,10 +25,109 @@ function Assessment() {
       "neuromatrix_assessment_answers"
     );
 
-    return savedAnswers
-      ? JSON.parse(savedAnswers)
-      : {};
+    return savedAnswers ? JSON.parse(savedAnswers) : {};
   });
+
+  // =========================================================
+  // LOAD ASSESSMENT FROM DJANGO
+  // =========================================================
+
+  useEffect(() => {
+    const loadAssessment = async () => {
+      try {
+        setLoading(true);
+
+        const data = await getAssessment(ASSESSMENT_SLUG);
+
+        setAssessment(data);
+      } catch (err) {
+        console.error("Failed to load assessment:", err);
+
+        setError(
+          "Unable to load the assessment. Please try again."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadAssessment();
+  }, []);
+
+  // =========================================================
+  // SAVE ANSWERS TO LOCAL STORAGE
+  // =========================================================
+
+  useEffect(() => {
+    localStorage.setItem(
+      "neuromatrix_assessment_answers",
+      JSON.stringify(answers)
+    );
+  }, [answers]);
+
+  // =========================================================
+  // LOADING STATE
+  // =========================================================
+
+  if (loading) {
+    return (
+      <div className="questionnaire-page">
+        <main className="questionnaire-main">
+          <div className="assessment-top">
+            <div>
+              <p className="assessment-label">
+                NeuroMatrix
+              </p>
+
+              <h1>Loading Assessment...</h1>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // =========================================================
+  // ERROR STATE
+  // =========================================================
+
+  if (error || !assessment) {
+    return (
+      <div className="questionnaire-page">
+        <main className="questionnaire-main">
+          <div className="assessment-top">
+            <div>
+              <p className="assessment-label">
+                NeuroMatrix
+              </p>
+
+              <h1>Unable to Load Assessment</h1>
+
+              <p>{error}</p>
+
+              <button
+                onClick={() => window.location.reload()}
+              >
+                Try Again
+              </button>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // =========================================================
+  // FLATTEN QUESTIONS FROM SECTIONS
+  // =========================================================
+
+  const questions = assessment.sections.flatMap(
+    (section) => section.questions
+  );
+
+  // =========================================================
+  // PAGINATION
+  // =========================================================
 
   const totalPages = Math.ceil(
     questions.length / QUESTIONS_PER_PAGE
@@ -91,6 +146,10 @@ function Assessment() {
     endIndex
   );
 
+  // =========================================================
+  // ANSWER SELECTION
+  // =========================================================
+
   const selectAnswer = (questionId, value) => {
     setAnswers((previous) => ({
       ...previous,
@@ -98,14 +157,24 @@ function Assessment() {
     }));
   };
 
+  // =========================================================
+  // CURRENT PAGE ANSWERS
+  // =========================================================
+
   const answeredOnCurrentPage =
     visibleQuestions.filter(
-      (question) => answers[question.id]
+      (question) => answers[question.id] !== undefined
     ).length;
+
+  // =========================================================
+  // NAVIGATION
+  // =========================================================
 
   const goToNextPage = () => {
     if (currentPage < totalPages - 1) {
-      setCurrentPage((previous) => previous + 1);
+      setCurrentPage(
+        (previous) => previous + 1
+      );
 
       window.scrollTo({
         top: 0,
@@ -116,7 +185,9 @@ function Assessment() {
 
   const goToPreviousPage = () => {
     if (currentPage > 0) {
-      setCurrentPage((previous) => previous - 1);
+      setCurrentPage(
+        (previous) => previous - 1
+      );
 
       window.scrollTo({
         top: 0,
@@ -125,14 +196,33 @@ function Assessment() {
     }
   };
 
+  // =========================================================
+  // SUBMIT
+  // =========================================================
+
   const submitAssessment = () => {
-    console.log("Assessment responses:", answers);
+    console.log(
+      "Assessment responses:",
+      answers
+    );
 
     navigate("/assessment/completed");
   };
 
+  // =========================================================
+  // PROGRESS
+  // =========================================================
+
   const overallProgress =
-    (Object.keys(answers).length / questions.length) * 100;
+    questions.length > 0
+      ? (Object.keys(answers).length /
+          questions.length) *
+        100
+      : 0;
+
+  // =========================================================
+  // RENDER
+  // =========================================================
 
   return (
     <div className="questionnaire-page">
@@ -148,12 +238,15 @@ function Assessment() {
         </div>
 
         <div className="questionnaire-progress-text">
-          {Object.keys(answers).length} / {questions.length} answered
+          {Object.keys(answers).length} /{" "}
+          {questions.length} answered
         </div>
 
         <button
           className="exit-assessment"
-          onClick={() => navigate("/dashboard")}
+          onClick={() =>
+            navigate("/dashboard")
+          }
         >
           Exit
         </button>
@@ -174,7 +267,7 @@ function Assessment() {
           <div>
 
             <p className="assessment-label">
-              {assessment.stage}
+              {assessment.name}
             </p>
 
             <h1>
@@ -184,13 +277,14 @@ function Assessment() {
           </div>
 
           <div className="page-counter">
-            Section {currentPage + 1} of {totalPages}
+            Section {currentPage + 1} of{" "}
+            {totalPages}
           </div>
 
         </div>
 
 
-        {/* Overall progress */}
+        {/* Overall Progress */}
 
         <div className="question-progress">
 
@@ -204,7 +298,7 @@ function Assessment() {
         </div>
 
 
-        {/* Section information */}
+        {/* Section Information */}
 
         <div className="assessment-section-info">
 
@@ -221,8 +315,8 @@ function Assessment() {
           </div>
 
           <p>
-            Answer each statement based on how well it
-            describes you.
+            Answer each statement based on how
+            well it describes you.
           </p>
 
         </div>
@@ -249,15 +343,20 @@ function Assessment() {
                   key={question.id}
                 >
 
+                  {/* Question Header */}
+
                   <div className="scroll-question-header">
 
                     <span className="scroll-question-number">
-                      {String(questionNumber).padStart(2, "0")}
+                      {String(
+                        questionNumber
+                      ).padStart(2, "0")}
                     </span>
 
                     <span className="question-status">
 
-                      {selectedAnswer
+                      {selectedAnswer !==
+                      undefined
                         ? "Answered"
                         : "Not answered"}
 
@@ -266,33 +365,36 @@ function Assessment() {
                   </div>
 
 
+                  {/* Question */}
+
                   <div className="scroll-question-content">
 
                     <p>
-                      How accurately does this statement
-                      describe you?
+                      How accurately does this
+                      statement describe you?
                     </p>
 
                     <h2>
-                      {question.statement}
+                      {question.text}
                     </h2>
 
                   </div>
 
 
-                  {/* Likert */}
+                  {/* Dynamic Likert Options */}
 
                   <div className="scroll-likert">
 
-                    {scaleOptions.map(
+                    {question.options.map(
                       (option) => {
 
                         const isSelected =
-                          selectedAnswer === option.value;
+                          selectedAnswer ===
+                          option.value;
 
                         return (
                           <button
-                            key={option.value}
+                            key={option.id}
                             className={
                               isSelected
                                 ? "scroll-likert-option selected"
@@ -315,7 +417,7 @@ function Assessment() {
                             </span>
 
                             <span>
-                              {option.label}
+                              {option.text}
                             </span>
 
                           </button>
@@ -356,7 +458,8 @@ function Assessment() {
           </div>
 
 
-          {currentPage === totalPages - 1 ? (
+          {currentPage ===
+          totalPages - 1 ? (
 
             <button
               className="question-next submit-assessment"
@@ -367,6 +470,7 @@ function Assessment() {
               }
             >
               Submit Assessment
+
               <span>✓</span>
             </button>
 
@@ -377,6 +481,7 @@ function Assessment() {
               onClick={goToNextPage}
             >
               Next 10
+
               <span>→</span>
             </button>
 
@@ -385,9 +490,12 @@ function Assessment() {
         </div>
 
 
+        {/* Footer */}
+
         <p className="assessment-footer-note">
-          There are no right or wrong answers. Choose the
-          response that best represents you.
+          There are no right or wrong answers.
+          Choose the response that best
+          represents you.
         </p>
 
       </main>

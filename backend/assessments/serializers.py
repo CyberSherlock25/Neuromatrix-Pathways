@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from .models import AssessmentAttempt, Response
 
 from .models import (
     Assessment,
@@ -97,4 +98,39 @@ class AssessmentSerializer(serializers.ModelSerializer):
             "description",
             "version",
             "sections",
+        ]
+
+
+class AssessmentAttemptSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AssessmentAttempt
+        fields = [
+            "id",
+            "assessment",
+            "session_id",
+            "started_at",
+            "completed_at",
+            "is_completed",
+        ]
+        read_only_fields = [
+            "id",
+            "started_at",
+            "completed_at",
+            "is_completed",
+        ]
+
+
+class ResponseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Response
+        fields = [
+            "id",
+            "attempt",
+            "question",
+            "selected_option",
+            "answered_at",
+        ]
+        read_only_fields = [
+            "id",
+            "answered_at",
         ]
