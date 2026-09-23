@@ -1,4 +1,8 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -10,45 +14,97 @@ import Assessment from "./pages/Assessment";
 import AssessmentCompleted from "./pages/AssessmentCompleted";
 import Report from "./pages/Report";
 
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider } from "./context/AuthContext";
+
+
 function App() {
   return (
-    <BrowserRouter>
+    <AuthProvider>
 
-      <Routes>
+      <BrowserRouter>
 
-        <Route path="/" element={<Home />} />
+        <Routes>
 
-        <Route path="/login" element={<Login />} />
+          {/* ================= PUBLIC ================= */}
 
-        <Route path="/signup" element={<Signup />} />
+          <Route
+            path="/"
+            element={<Home />}
+          />
 
-        <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/login"
+            element={<Login />}
+          />
 
-        <Route path="/profile" element={<Profile />} />
+          <Route
+            path="/signup"
+            element={<Signup />}
+          />
 
-        <Route
-          path="/assessment"
-          element={<AssessmentIntro />}
-        />
 
-        <Route
-          path="/assessment/questions"
-          element={<Assessment />}
-        />
+          {/* ================= PROTECTED ================= */}
 
-        <Route
-          path="/assessment/completed"
-          element={<AssessmentCompleted />}
-        />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/report"
-          element={<Report />}
-        />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
 
-      </Routes>
+          <Route
+            path="/assessment"
+            element={
+              <ProtectedRoute>
+                <AssessmentIntro />
+              </ProtectedRoute>
+            }
+          />
 
-    </BrowserRouter>
+          <Route
+            path="/assessment/questions"
+            element={
+              <ProtectedRoute>
+                <Assessment />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/assessment/completed"
+            element={
+              <ProtectedRoute>
+                <AssessmentCompleted />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/report"
+            element={
+              <ProtectedRoute>
+                <Report />
+              </ProtectedRoute>
+            }
+          />
+
+        </Routes>
+
+      </BrowserRouter>
+
+    </AuthProvider>
   );
 }
 

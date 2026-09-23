@@ -1,14 +1,22 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
+
+from rest_framework.decorators import (
+    api_view,
+    permission_classes,
+)
 
 from .models import (
     Assessment,
     AssessmentAttempt,
     Response as AssessmentResponse,
     Option,
+    Question,
 )
 from .serializers import (
     AssessmentSerializer,
@@ -45,6 +53,7 @@ def assessment_detail(request, slug):
 
 
 @api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def start_attempt(request, slug):
     try:
         assessment = Assessment.objects.get(
@@ -53,15 +62,14 @@ def start_attempt(request, slug):
         )
     except Assessment.DoesNotExist:
         return Response(
-            {
-                "error": "Assessment not found."
-            },
+            {"error": "Assessment not found."},
             status=status.HTTP_404_NOT_FOUND,
         )
 
     session_id = request.data.get("session_id", "")
 
     attempt = AssessmentAttempt.objects.create(
+        user=request.user,
         assessment=assessment,
         session_id=session_id,
     )
@@ -72,21 +80,21 @@ def start_attempt(request, slug):
         serializer.data,
         status=status.HTTP_201_CREATED,
     )
+
+
+
 @api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def save_response(request, attempt_id):
-    try:
-        attempt = AssessmentAttempt.objects.get(
-            id=attempt_id
-        )
-    except AssessmentAttempt.DoesNotExist:
-        return Response(
-            {"error": "Assessment attempt not found."},
-            status=status.HTTP_404_NOT_FOUND,
-        )
+    attempt = get_object_or_404(
+        AssessmentAttempt,
+        id=attempt_id,
+        user=request.user,
+    )
 
     if attempt.is_completed:
         return Response(
-            {"error": "This assessment has already been completed."},
+            {"error": "Cannot modify a completed assessment."},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
@@ -96,48 +104,43 @@ def save_response(request, attempt_id):
     if not question_id or not selected_option_id:
         return Response(
             {
-                "error": "Question and selected_option are required."
+                "error": "question and selected_option are required."
             },
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    # Check that the question belongs to this assessment
-    question_exists = attempt.assessment.sections.filter(
-        questions__id=question_id,
-        questions__is_active=True,
-    ).exists()
-
-    if not question_exists:
+    try:
+        question = Question.objects.get(
+            id=question_id,
+            section__assessment=attempt.assessment,
+            is_active=True,
+        )
+    except Question.DoesNotExist:
         return Response(
-            {
-                "error": "This question does not belong to the assessment."
-            },
+            {"error": "Invalid question for this assessment."},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    # Check that the selected option belongs to the question
-    option_exists = Option.objects.filter(
-        id=selected_option_id,
-        question_id=question_id,
-    ).exists()
-
-    if not option_exists:
+    try:
+        option = Option.objects.get(
+            id=selected_option_id,
+            question=question,
+        )
+    except Option.DoesNotExist:
         return Response(
-            {
-                "error": "This option does not belong to the selected question."
-            },
+            {"error": "Invalid option for this question."},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    response, created = AssessmentResponse.objects.update_or_create(
+    response_obj, created = AssessmentResponse.objects.update_or_create(
         attempt=attempt,
-        question_id=question_id,
+        question=question,
         defaults={
-            "selected_option_id": selected_option_id
+            "selected_option": option,
         },
     )
 
-    serializer = ResponseSerializer(response)
+    serializer = ResponseSerializer(response_obj)
 
     return Response(
         serializer.data,
@@ -148,31 +151,24 @@ def save_response(request, attempt_id):
         ),
     )
 
-
 @api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def complete_attempt(request, attempt_id):
-    try:
-        attempt = AssessmentAttempt.objects.get(
-            id=attempt_id
-        )
-    except AssessmentAttempt.DoesNotExist:
-        return Response(
-            {
-                "error": "Assessment attempt not found."
-            },
-            status=status.HTTP_404_NOT_FOUND,
-        )
+    attempt = get_object_or_404(
+        AssessmentAttempt,
+        id=attempt_id,
+        user=request.user,
+    )
 
     if attempt.is_completed:
         return Response(
-            {
-                "error": "Assessment already completed."
-            },
+            {"error": "Assessment already completed."},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
     attempt.is_completed = True
     attempt.completed_at = timezone.now()
+
     attempt.save(
         update_fields=[
             "is_completed",
@@ -180,6 +176,7 @@ def complete_attempt(request, attempt_id):
         ]
     )
 
-    serializer = AssessmentAttemptSerializer(attempt)
-
-    return Response(serializer.data)
+    return Response(
+        AssessmentAttemptSerializer(attempt).data,
+        status=status.HTTP_200_OK,
+    )

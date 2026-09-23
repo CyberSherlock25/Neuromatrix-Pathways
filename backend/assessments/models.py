@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.conf import settings
 
 class Assessment(models.Model):
     name = models.CharField(max_length=200)
@@ -118,24 +118,44 @@ class QuestionDimension(models.Model):
 
 
 class AssessmentAttempt(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="assessment_attempts",
+        null=True,
+        blank=True,
+    )
+
     assessment = models.ForeignKey(
         Assessment,
         on_delete=models.CASCADE,
-        related_name="attempts"
+        related_name="attempts",
     )
 
     session_id = models.CharField(
         max_length=100,
-        blank=True
+        blank=True,
     )
 
-    started_at = models.DateTimeField(auto_now_add=True)
-    completed_at = models.DateTimeField(null=True, blank=True)
+    started_at = models.DateTimeField(
+        auto_now_add=True,
+    )
 
-    is_completed = models.BooleanField(default=False)
+    completed_at = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
+
+    is_completed = models.BooleanField(
+        default=False,
+    )
 
     def __str__(self):
-        return f"{self.assessment.name} - Attempt {self.id}"
+        return (
+            f"{self.user.username} - "
+            f"{self.assessment.name} - "
+            f"Attempt {self.id}"
+        )
 
 
 class Response(models.Model):

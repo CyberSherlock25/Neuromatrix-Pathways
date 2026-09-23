@@ -8,35 +8,31 @@ from .views import (
     complete_attempt,
 )
 
-
 urlpatterns = [
-    path(
-        "health/",
-        health_check,
-        name="health-check",
-    ),
+    # General assessment endpoints
+    path("health/", health_check, name="health-check"),
 
-    path(
-        "<slug:slug>/",
-        assessment_detail,
-        name="assessment-detail",
-    ),
-
-    path(
-        "<slug:slug>/attempts/",
-        start_attempt,
-        name="start-attempt",
-    ),
-
+    # Attempt endpoints
     path(
         "attempts/<int:attempt_id>/responses/",
         save_response,
         name="save-response",
     ),
-
     path(
         "attempts/<int:attempt_id>/complete/",
         complete_attempt,
         name="complete-attempt",
+    ),
+
+    # Assessment endpoints
+    path(
+        "<slug:slug>/attempts/",
+        start_attempt,
+        name="start-attempt",
+    ),
+    path(
+        "<slug:slug>/",
+        assessment_detail,
+        name="assessment-detail",
     ),
 ]

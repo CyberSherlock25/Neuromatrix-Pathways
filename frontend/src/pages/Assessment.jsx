@@ -1,15 +1,24 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { getAssessment } from "../api/assessments";
+import {
+  getAssessment,
+  startAttempt,
+  saveResponse,
+  completeAttempt,
+} from "../api/assessments";
 
 import "../App.css";
 
 const QUESTIONS_PER_PAGE = 10;
 
-// Temporary during backend integration.
-// Later this will come dynamically from the user's profile/route.
 const ASSESSMENT_SLUG = "neuromatrix-personality";
+
+const ANSWERS_STORAGE_KEY =
+  "neuromatrix_assessment_answers";
+
+const ATTEMPT_STORAGE_KEY =
+  "neuromatrix_assessment_attempt";
 
 function Assessment() {
   const navigate = useNavigate();
@@ -18,30 +27,78 @@ function Assessment() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [attemptId, setAttemptId] = useState(() => {
+    return localStorage.getItem(ATTEMPT_STORAGE_KEY);
+  });
+
   const [currentPage, setCurrentPage] = useState(0);
 
   const [answers, setAnswers] = useState(() => {
     const savedAnswers = localStorage.getItem(
-      "neuromatrix_assessment_answers"
+      ANSWERS_STORAGE_KEY
     );
 
-    return savedAnswers ? JSON.parse(savedAnswers) : {};
+    return savedAnswers
+      ? JSON.parse(savedAnswers)
+      : {};
   });
 
+  const [savingQuestion, setSavingQuestion] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+
   // =========================================================
-  // LOAD ASSESSMENT FROM DJANGO
+  // LOAD ASSESSMENT + START ATTEMPT
   // =========================================================
 
   useEffect(() => {
-    const loadAssessment = async () => {
+    const initializeAssessment = async () => {
       try {
         setLoading(true);
+        setError(null);
 
-        const data = await getAssessment(ASSESSMENT_SLUG);
+        // Load assessment definition
+        const data = await getAssessment(
+          ASSESSMENT_SLUG
+        );
 
         setAssessment(data);
+
+        // -----------------------------------------------------
+        // Reuse an existing attempt if one exists
+        // -----------------------------------------------------
+
+        let currentAttemptId = localStorage.getItem(
+          ATTEMPT_STORAGE_KEY
+        );
+
+        // -----------------------------------------------------
+        // Otherwise create a new attempt
+        // -----------------------------------------------------
+
+        if (!currentAttemptId) {
+          const sessionId = crypto.randomUUID();
+
+          const attempt = await startAttempt(
+            ASSESSMENT_SLUG,
+            sessionId
+          );
+
+          currentAttemptId = String(attempt.id);
+
+          localStorage.setItem(
+            ATTEMPT_STORAGE_KEY,
+            currentAttemptId
+          );
+
+          setAttemptId(currentAttemptId);
+        } else {
+          setAttemptId(currentAttemptId);
+        }
       } catch (err) {
-        console.error("Failed to load assessment:", err);
+        console.error(
+          "Failed to initialize assessment:",
+          err
+        );
 
         setError(
           "Unable to load the assessment. Please try again."
@@ -51,16 +108,16 @@ function Assessment() {
       }
     };
 
-    loadAssessment();
+    initializeAssessment();
   }, []);
 
   // =========================================================
-  // SAVE ANSWERS TO LOCAL STORAGE
+  // SAVE ANSWERS LOCALLY
   // =========================================================
 
   useEffect(() => {
     localStorage.setItem(
-      "neuromatrix_assessment_answers",
+      ANSWERS_STORAGE_KEY,
       JSON.stringify(answers)
     );
   }, [answers]);
@@ -91,7 +148,7 @@ function Assessment() {
   // ERROR STATE
   // =========================================================
 
-  if (error || !assessment) {
+  if (error || !assessment || !attemptId) {
     return (
       <div className="questionnaire-page">
         <main className="questionnaire-main">
@@ -103,10 +160,15 @@ function Assessment() {
 
               <h1>Unable to Load Assessment</h1>
 
-              <p>{error}</p>
+              <p>
+                {error ||
+                  "Unable to create assessment attempt."}
+              </p>
 
               <button
-                onClick={() => window.location.reload()}
+                onClick={() =>
+                  window.location.reload()
+                }
               >
                 Try Again
               </button>
@@ -118,7 +180,7 @@ function Assessment() {
   }
 
   // =========================================================
-  // FLATTEN QUESTIONS FROM SECTIONS
+  // FLATTEN QUESTIONS
   // =========================================================
 
   const questions = assessment.sections.flatMap(
@@ -150,11 +212,37 @@ function Assessment() {
   // ANSWER SELECTION
   // =========================================================
 
-  const selectAnswer = (questionId, value) => {
+  const selectAnswer = async (
+    questionId,
+    optionId
+  ) => {
+    // Update UI immediately
     setAnswers((previous) => ({
       ...previous,
-      [questionId]: value,
+      [questionId]: optionId,
     }));
+
+    // Save to Django
+    try {
+      setSavingQuestion(questionId);
+
+      await saveResponse(
+        attemptId,
+        questionId,
+        optionId
+      );
+    } catch (err) {
+      console.error(
+        "Failed to save response:",
+        err
+      );
+
+      setError(
+        "Your answer could not be saved. Please try again."
+      );
+    } finally {
+      setSavingQuestion(null);
+    }
   };
 
   // =========================================================
@@ -163,7 +251,8 @@ function Assessment() {
 
   const answeredOnCurrentPage =
     visibleQuestions.filter(
-      (question) => answers[question.id] !== undefined
+      (question) =>
+        answers[question.id] !== undefined
     ).length;
 
   // =========================================================
@@ -200,13 +289,42 @@ function Assessment() {
   // SUBMIT
   // =========================================================
 
-  const submitAssessment = () => {
-    console.log(
-      "Assessment responses:",
-      answers
-    );
+  const submitAssessment = async () => {
+    if (
+      Object.keys(answers).length !==
+      questions.length
+    ) {
+      return;
+    }
 
-    navigate("/assessment/completed");
+    try {
+      setSubmitting(true);
+      setError(null);
+
+      await completeAttempt(attemptId);
+
+      // Clear local assessment state
+      localStorage.removeItem(
+        ANSWERS_STORAGE_KEY
+      );
+
+      localStorage.removeItem(
+        ATTEMPT_STORAGE_KEY
+      );
+
+      navigate("/assessment/completed");
+    } catch (err) {
+      console.error(
+        "Failed to complete assessment:",
+        err
+      );
+
+      setError(
+        "Unable to submit the assessment. Please try again."
+      );
+
+      setSubmitting(false);
+    }
   };
 
   // =========================================================
@@ -227,9 +345,7 @@ function Assessment() {
   return (
     <div className="questionnaire-page">
 
-      {/* =================================================
-          HEADER
-      ================================================= */}
+      {/* HEADER */}
 
       <nav className="questionnaire-navbar">
 
@@ -253,14 +369,11 @@ function Assessment() {
 
       </nav>
 
-
-      {/* =================================================
-          MAIN
-      ================================================= */}
+      {/* MAIN */}
 
       <main className="questionnaire-main">
 
-        {/* Header */}
+        {/* HEADER */}
 
         <div className="assessment-top">
 
@@ -283,8 +396,7 @@ function Assessment() {
 
         </div>
 
-
-        {/* Overall Progress */}
+        {/* PROGRESS */}
 
         <div className="question-progress">
 
@@ -297,8 +409,7 @@ function Assessment() {
 
         </div>
 
-
-        {/* Section Information */}
+        {/* SECTION INFORMATION */}
 
         <div className="assessment-section-info">
 
@@ -321,10 +432,7 @@ function Assessment() {
 
         </div>
 
-
-        {/* =================================================
-            QUESTIONS
-        ================================================= */}
+        {/* QUESTIONS */}
 
         <div className="question-list">
 
@@ -337,13 +445,17 @@ function Assessment() {
               const selectedAnswer =
                 answers[question.id];
 
+              const isSaving =
+                savingQuestion ===
+                question.id;
+
               return (
                 <section
                   className="scroll-question-card"
                   key={question.id}
                 >
 
-                  {/* Question Header */}
+                  {/* QUESTION HEADER */}
 
                   <div className="scroll-question-header">
 
@@ -355,8 +467,10 @@ function Assessment() {
 
                     <span className="question-status">
 
-                      {selectedAnswer !==
-                      undefined
+                      {isSaving
+                        ? "Saving..."
+                        : selectedAnswer !==
+                          undefined
                         ? "Answered"
                         : "Not answered"}
 
@@ -364,8 +478,7 @@ function Assessment() {
 
                   </div>
 
-
-                  {/* Question */}
+                  {/* QUESTION */}
 
                   <div className="scroll-question-content">
 
@@ -380,8 +493,7 @@ function Assessment() {
 
                   </div>
 
-
-                  {/* Dynamic Likert Options */}
+                  {/* OPTIONS */}
 
                   <div className="scroll-likert">
 
@@ -390,7 +502,7 @@ function Assessment() {
 
                         const isSelected =
                           selectedAnswer ===
-                          option.value;
+                          option.id;
 
                         return (
                           <button
@@ -403,8 +515,11 @@ function Assessment() {
                             onClick={() =>
                               selectAnswer(
                                 question.id,
-                                option.value
+                                option.id
                               )
+                            }
+                            disabled={
+                              isSaving
                             }
                           >
 
@@ -434,10 +549,7 @@ function Assessment() {
 
         </div>
 
-
-        {/* =================================================
-            NAVIGATION
-        ================================================= */}
+        {/* NAVIGATION */}
 
         <div className="scroll-navigation">
 
@@ -449,14 +561,10 @@ function Assessment() {
             ← Previous 10
           </button>
 
-
           <div className="section-answer-count">
-
             {answeredOnCurrentPage} /{" "}
             {visibleQuestions.length} answered
-
           </div>
-
 
           {currentPage ===
           totalPages - 1 ? (
@@ -466,12 +574,17 @@ function Assessment() {
               onClick={submitAssessment}
               disabled={
                 Object.keys(answers).length !==
-                questions.length
+                  questions.length ||
+                submitting
               }
             >
-              Submit Assessment
+              {submitting
+                ? "Submitting..."
+                : "Submit Assessment"}
 
-              <span>✓</span>
+              {!submitting && (
+                <span>✓</span>
+              )}
             </button>
 
           ) : (
@@ -489,8 +602,21 @@ function Assessment() {
 
         </div>
 
+        {/* ERROR */}
 
-        {/* Footer */}
+        {error && (
+          <p
+            style={{
+              color: "red",
+              marginTop: "20px",
+              textAlign: "center",
+            }}
+          >
+            {error}
+          </p>
+        )}
+
+        {/* FOOTER */}
 
         <p className="assessment-footer-note">
           There are no right or wrong answers.
