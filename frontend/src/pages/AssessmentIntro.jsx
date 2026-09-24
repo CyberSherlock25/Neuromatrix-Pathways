@@ -10,14 +10,17 @@ import {
 
 import "../App.css";
 
-import api from "../api/client";
-import { startAttempt } from "../api/assessments";
+import {
+  getMyAssessment,
+  startAttempt,
+} from "../api/assessments";
 
 
-const ASSESSMENT_SLUG =
-  "neuromatrix-personality";
-const ATTEMPT_STORAGE_KEY = "neuromatrix_assessment_attempt";
-const ANSWERS_STORAGE_KEY = "neuromatrix_assessment_answers";
+const ATTEMPT_STORAGE_KEY =
+  "neuromatrix_assessment_attempt";
+
+const ANSWERS_STORAGE_KEY =
+  "neuromatrix_assessment_answers";
 
 
 function AssessmentIntro() {
@@ -32,17 +35,30 @@ function AssessmentIntro() {
   const [error, setError] =
     useState("");
 
+  const [starting, setStarting] =
+    useState(false);
+
+
+  /*
+   * ================================
+   * LOAD ASSIGNED ASSESSMENT
+   * ================================
+   */
 
   useEffect(() => {
     const loadAssessment = async () => {
       try {
-        const response = await api.get(
-          `/assessments/${ASSESSMENT_SLUG}/`
-        );
+        setError("");
 
-        setAssessment(response.data);
+        const data = await getMyAssessment();
+
+        setAssessment(data);
+
       } catch (err) {
-        console.error(err);
+        console.error(
+          "Failed to load assigned assessment:",
+          err
+        );
 
         if (err.response?.status === 401) {
           navigate("/login");
@@ -50,7 +66,8 @@ function AssessmentIntro() {
         }
 
         setError(
-          "Unable to load assessment information."
+          err.response?.data?.detail ||
+          "Unable to load your assigned assessment."
         );
       } finally {
         setLoading(false);
@@ -61,21 +78,34 @@ function AssessmentIntro() {
   }, [navigate]);
 
 
+  /*
+   * ================================
+   * LOADING STATE
+   * ================================
+   */
+
   if (loading) {
     return (
       <div className="assessment-intro-page">
         <main className="assessment-intro-main">
-          <p>Loading assessment...</p>
+          <p>Loading your assessment...</p>
         </main>
       </div>
     );
   }
 
 
+  /*
+   * ================================
+   * ERROR STATE
+   * ================================
+   */
+
   if (error || !assessment) {
     return (
       <div className="assessment-intro-page">
         <main className="assessment-intro-main">
+
           <p>
             {error ||
               "Assessment information unavailable."}
@@ -87,52 +117,11 @@ function AssessmentIntro() {
           >
             Back to Dashboard
           </Link>
+
         </main>
       </div>
     );
   }
-
-
-  /*
-   * ================================
-   * ASSESSMENT DATA
-   * ================================
-   */
-
-  const sections =
-    assessment.sections || [];
-
-
-  const questions = sections.flatMap(
-    (section) =>
-      section.questions || []
-  );
-
-
-  const questionCount =
-    questions.length;
-
-
-  const firstQuestion =
-    questions[0];
-
-
-  const options =
-    firstQuestion?.options || [];
-
-
-  /*
-   * ================================
-   * RESPONSE SCALE
-   * ================================
-   */
-
-  const responseScale =
-    options.map((option) => ({
-      value: option.value,
-      text: option.text,
-      order: option.order,
-    }));
 
 
   /*
@@ -142,45 +131,84 @@ function AssessmentIntro() {
    */
 
   const handleBeginAssessment = async () => {
-  try {
-    setError("");
+    try {
+      setError("");
+      setStarting(true);
 
-    // Always start a fresh attempt
-    localStorage.removeItem(ATTEMPT_STORAGE_KEY);
-    localStorage.removeItem(ANSWERS_STORAGE_KEY);
+      /*
+       * Always start a fresh attempt.
+       */
 
-    const sessionId = crypto.randomUUID();
+      localStorage.removeItem(
+        ATTEMPT_STORAGE_KEY
+      );
 
-    const attempt = await startAttempt(
-      ASSESSMENT_SLUG,
-      sessionId
-    );
+      localStorage.removeItem(
+        ANSWERS_STORAGE_KEY
+      );
 
-    // Store the NEW attempt ID
-    localStorage.setItem(
-      ATTEMPT_STORAGE_KEY,
-      String(attempt.id)
-    );
+      const sessionId = crypto.randomUUID();
 
-    navigate("/assessment/questions");
-  } catch (err) {
-    console.error(
-      "Failed to start assessment:",
-      err
-    );
+      /*
+       * IMPORTANT:
+       *
+       * We use the assessment slug returned
+       * by Django.
+       *
+       * React does NOT decide which assessment
+       * the student receives.
+       */
 
-    if (err.response?.status === 401) {
-      navigate("/login");
-      return;
+      const attempt = await startAttempt(
+        assessment.slug,
+        sessionId
+      );
+
+      localStorage.setItem(
+        ATTEMPT_STORAGE_KEY,
+        String(attempt.id)
+      );
+
+      navigate("/assessment/questions");
+
+    } catch (err) {
+      console.error(
+        "Failed to start assessment:",
+        err
+      );
+
+      if (err.response?.status === 401) {
+        navigate("/login");
+        return;
+      }
+
+      setError(
+        err.response?.data?.error ||
+        err.response?.data?.detail ||
+        "Unable to start the assessment. Please try again."
+      );
+    } finally {
+      setStarting(false);
     }
+  };
 
-    setError(
-      err.response?.data?.error ||
-      "Unable to start the assessment. Please try again."
-    );
-  }
-};
 
+  /*
+   * ================================
+   * CURRENT ASSESSMENT INFORMATION
+   * ================================
+   */
+
+  /*
+   * The current /my-assessment/ endpoint
+   * returns assessment metadata only.
+   *
+   * Therefore we don't assume questions,
+   * sections or options exist in this response.
+   *
+   * The actual assessment content will be
+   * loaded by the assessment questions page.
+   */
 
   return (
     <div className="assessment-intro-page">
@@ -198,7 +226,6 @@ function AssessmentIntro() {
           </span>{" "}
           Pathways
         </Link>
-
 
         <div className="dashboard-nav">
 
@@ -219,14 +246,13 @@ function AssessmentIntro() {
 
       <main className="assessment-intro-main">
 
-        {/* Header */}
+        {/* ================= HEADER ================= */}
 
         <div className="assessment-intro-header">
 
           <p className="dashboard-eyebrow">
             NEUROMATRIX ASSESSMENT
           </p>
-
 
           <h1>
             A little time to
@@ -235,6 +261,9 @@ function AssessmentIntro() {
             </span>
           </h1>
 
+          <h2>
+            {assessment.name}
+          </h2>
 
           <p>
             {assessment.description ||
@@ -248,7 +277,30 @@ function AssessmentIntro() {
 
         <div className="assessment-info-grid">
 
-          {/* Questions */}
+          {/* Assessment */}
+
+          <div className="assessment-info-card">
+
+            <span className="info-icon">
+              ◈
+            </span>
+
+            <div>
+
+              <small>
+                ASSESSMENT
+              </small>
+
+              <strong>
+                {assessment.name}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          {/* Student Standard */}
 
           <div className="assessment-info-card">
 
@@ -259,11 +311,12 @@ function AssessmentIntro() {
             <div>
 
               <small>
-                QUESTIONS
+                ASSIGNED FOR
               </small>
 
               <strong>
-                {questionCount}
+                {assessment.student_status ||
+                  "Your student category"}
               </strong>
 
             </div>
@@ -271,7 +324,7 @@ function AssessmentIntro() {
           </div>
 
 
-          {/* Estimated Time */}
+          {/* Version */}
 
           <div className="assessment-info-card">
 
@@ -282,36 +335,12 @@ function AssessmentIntro() {
             <div>
 
               <small>
-                ESTIMATED TIME
+                VERSION
               </small>
 
               <strong>
-                Not specified
-              </strong>
-
-            </div>
-
-          </div>
-
-
-          {/* Response Format */}
-
-          <div className="assessment-info-card">
-
-            <span className="info-icon">
-              ◉
-            </span>
-
-            <div>
-
-              <small>
-                RESPONSE FORMAT
-              </small>
-
-              <strong>
-                {responseScale.length
-                  ? `${responseScale.length}-point scale`
-                  : "Not specified"}
+                {assessment.version ||
+                  "Current"}
               </strong>
 
             </div>
@@ -331,11 +360,9 @@ function AssessmentIntro() {
               BEFORE YOU BEGIN
             </p>
 
-
             <h2>
               Answer honestly, not perfectly.
             </h2>
-
 
             <p>
               There are no right or wrong
@@ -399,37 +426,50 @@ function AssessmentIntro() {
         <section className="scale-section">
 
           <p className="dashboard-eyebrow">
-            RESPONSE SCALE
+            ASSESSMENT FORMAT
           </p>
 
-
           <h2>
-            How you'll answer
+            What to expect
           </h2>
-
 
           <div className="scale-preview">
 
-            {responseScale.map(
-              (option) => (
+            <div className="scale-item">
 
-                <div
-                  className="scale-item"
-                  key={option.order}
-                >
+              <span className="scale-circle">
+                ✓
+              </span>
 
-                  <span className="scale-circle">
-                    {option.value}
-                  </span>
+              <span>
+                Answer every required question
+              </span>
 
-                  <span>
-                    {option.text}
-                  </span>
+            </div>
 
-                </div>
+            <div className="scale-item">
 
-              )
-            )}
+              <span className="scale-circle">
+                ✓
+              </span>
+
+              <span>
+                Your responses are saved securely
+              </span>
+
+            </div>
+
+            <div className="scale-item">
+
+              <span className="scale-circle">
+                ✓
+              </span>
+
+              <span>
+                Results are reviewed professionally
+              </span>
+
+            </div>
 
           </div>
 
@@ -445,17 +485,27 @@ function AssessmentIntro() {
             minutes before beginning.
           </p>
 
+          {error && (
+            <p className="assessment-error">
+              {error}
+            </p>
+          )}
 
           <button
             type="button"
             className="assessment-begin-button"
             onClick={handleBeginAssessment}
+            disabled={starting}
           >
-            Begin Assessment
+            {starting
+              ? "Starting..."
+              : "Begin Assessment"}
 
-            <span>
-              →
-            </span>
+            {!starting && (
+              <span>
+                →
+              </span>
+            )}
 
           </button>
 

@@ -1,11 +1,28 @@
 import api from "./client";
 
+
 export const getAssessment = async (slug) => {
-  const response = await api.get(`/assessments/${slug}/`);
+  const response = await api.get(
+    `/assessments/${slug}/`
+  );
+
   return response.data;
 };
 
-export const startAttempt = async (slug, sessionId = "") => {
+
+export const getMyAssessment = async () => {
+  const response = await api.get(
+    "/assessments/my-assessment/"
+  );
+
+  return response.data;
+};
+
+
+export const startAttempt = async (
+  slug,
+  sessionId
+) => {
   const response = await api.post(
     `/assessments/${slug}/attempts/`,
     {
@@ -16,26 +33,38 @@ export const startAttempt = async (slug, sessionId = "") => {
   return response.data;
 };
 
+
 export const saveResponse = async (
   attemptId,
   questionId,
-  selectedOptionId
+  optionId
 ) => {
   const response = await api.post(
     `/assessments/attempts/${attemptId}/responses/`,
     {
-      question: questionId,
-      selected_option: selectedOptionId,
+      question_id: questionId,
+      option_id: optionId,
     }
   );
 
   return response.data;
 };
 
-export const completeAttempt = async (attemptId) => {
+
+export const completeAttempt = async (
+  attemptId
+) => {
   const response = await api.post(
-    `/assessments/attempts/${attemptId}/complete/`,
-    {}
+    `/assessments/attempts/${attemptId}/complete/`
+  );
+
+  return response.data;
+};
+
+
+export const getAdminDashboardStats = async () => {
+  const response = await api.get(
+    "/assessments/admin/dashboard/stats/"
   );
 
   return response.data;

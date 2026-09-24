@@ -3,7 +3,7 @@ from rest_framework.permissions import BasePermission
 
 class IsAdminUser(BasePermission):
     """
-    Allows access only to authenticated Django staff users.
+    Allows access only to authenticated staff users.
     """
 
     message = "Admin access required."

@@ -344,3 +344,33 @@ class ScoringConfiguration(models.Model):
             f"{self.assessment.name} "
             f"- Scoring v{self.version}"
         )
+
+
+from accounts.models import UserProfile
+
+class AssessmentAssignment(models.Model):
+    assessment = models.ForeignKey(
+        Assessment,
+        on_delete=models.CASCADE,
+        related_name="assignments",
+    )
+
+    student_status = models.CharField(
+        max_length=30,
+        choices=UserProfile.STUDENT_STATUS_CHOICES,
+        unique=True,
+    )
+
+    is_active = models.BooleanField(default=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["student_status"]
+
+    def __str__(self):
+        return (
+            f"{self.student_status} → "
+            f"{self.assessment.name}"
+        )

@@ -10,13 +10,11 @@ import {
 
 import "../App.css";
 
-import api from "../api/client";
+import {
+  getMyAssessment,
+} from "../api/assessments";
 
 import { useAuth } from "../context/AuthContext";
-
-
-const ASSESSMENT_SLUG =
-  "neuromatrix-personality";
 
 
 const STATUS_LABELS = {
@@ -40,6 +38,10 @@ function Dashboard() {
   } = useAuth();
 
 
+  // =========================================================
+  // ASSESSMENT STATE
+  // =========================================================
+
   const [
     assessment,
     setAssessment,
@@ -53,45 +55,86 @@ function Dashboard() {
 
 
   const [
-    error,
-    setError,
+    assessmentError,
+    setAssessmentError,
   ] = useState("");
 
 
+  // =========================================================
+  // LOAD ASSIGNED ASSESSMENT
+  // =========================================================
+
   useEffect(() => {
 
-    const loadAssessment = async () => {
+    const loadAssignedAssessment = async () => {
 
       try {
 
-        const response = await api.get(
-          `/assessments/${ASSESSMENT_SLUG}/`
-        );
+        setAssessmentLoading(true);
+        setAssessmentError("");
 
-        setAssessment(
-          response.data
-        );
+        const data =
+          await getMyAssessment();
+
+        setAssessment(data);
 
       } catch (err) {
 
-        console.error(err);
-
-        setError(
-          "Unable to load assessment information."
+        console.error(
+          "Failed to load assigned assessment:",
+          err
         );
+
+        if (
+          err.response?.status === 404
+        ) {
+
+          setAssessment(null);
+
+          setAssessmentError(
+            "No assessment is currently assigned to your student standard."
+          );
+
+        } else if (
+          err.response?.status === 401
+        ) {
+
+          logout();
+          navigate("/login");
+
+          return;
+
+        } else {
+
+          setAssessmentError(
+            "Unable to load your assigned assessment."
+          );
+
+        }
 
       } finally {
 
         setAssessmentLoading(false);
 
       }
+
     };
 
 
-    loadAssessment();
+    if (user) {
+      loadAssignedAssessment();
+    }
 
-  }, []);
+  }, [
+    user,
+    logout,
+    navigate,
+  ]);
 
+
+  // =========================================================
+  // LOGOUT
+  // =========================================================
 
   const handleLogout = () => {
 
@@ -102,10 +145,18 @@ function Dashboard() {
   };
 
 
+  // =========================================================
+  // USER CHECK
+  // =========================================================
+
   if (!user) {
     return null;
   }
 
+
+  // =========================================================
+  // USER DISPLAY DATA
+  // =========================================================
 
   const fullName = [
     user.first_name,
@@ -116,7 +167,8 @@ function Dashboard() {
 
 
   const displayName =
-    fullName || user.username;
+    fullName ||
+    user.username;
 
 
   const studentStatus =
@@ -127,32 +179,35 @@ function Dashboard() {
     "Not specified";
 
 
+  // =========================================================
+  // ASSESSMENT DATA
+  // =========================================================
+
   const questionCount =
-    assessment?.sections?.reduce(
-      (
-        total,
-        section
-      ) =>
-        total +
-        (
-          section.questions?.length ||
-          0
-        ),
-      0
-    ) || 0;
+    assessment?.question_count || 0;
 
 
   const responseScale =
-    assessment
-      ?.sections?.[0]
-      ?.questions?.[0]
-      ?.options?.length || 0;
+    assessment?.response_scale || 0;
 
+
+  const assessmentName =
+    assessment?.name ||
+    "Assessment";
+
+
+  // =========================================================
+  // RENDER
+  // =========================================================
 
   return (
+
     <div className="dashboard-page">
 
-      {/* ================= NAVBAR ================= */}
+
+      {/* =====================================================
+          NAVBAR
+      ===================================================== */}
 
       <nav className="dashboard-navbar">
 
@@ -160,10 +215,12 @@ function Dashboard() {
           to="/"
           className="dashboard-brand"
         >
+
           <span>
             NeuroMatrix
           </span>{" "}
           Pathways
+
         </Link>
 
 
@@ -173,9 +230,11 @@ function Dashboard() {
             Dashboard
           </Link>
 
+
           <Link to="/profile">
             Profile
           </Link>
+
 
           <button
             className="logout-button"
@@ -189,11 +248,16 @@ function Dashboard() {
       </nav>
 
 
-      {/* ================= MAIN ================= */}
+      {/* =====================================================
+          MAIN
+      ===================================================== */}
 
       <main className="dashboard-main">
 
-        {/* Welcome */}
+
+        {/* ===================================================
+            WELCOME
+        =================================================== */}
 
         <section className="dashboard-welcome">
 
@@ -203,10 +267,12 @@ function Dashboard() {
               YOUR NEUROMATRIX JOURNEY
             </p>
 
+
             <h1>
               Welcome back,{" "}
               {displayName}.
             </h1>
+
 
             <p>
               This is your personal space
@@ -228,7 +294,9 @@ function Dashboard() {
         </section>
 
 
-        {/* Status */}
+        {/* ===================================================
+            STUDENT STATUS
+        =================================================== */}
 
         <section className="status-banner">
 
@@ -242,6 +310,7 @@ function Dashboard() {
             <span>
               CURRENT STUDENT STATUS
             </span>
+
 
             <strong>
               {studentStatus}
@@ -257,103 +326,240 @@ function Dashboard() {
         </section>
 
 
-        {/* Assessment */}
+        {/* ===================================================
+            ASSESSMENT
+        =================================================== */}
 
         <section className="assessment-dashboard-card">
 
+
           <div className="assessment-card-content">
+
 
             <p className="dashboard-eyebrow">
               YOUR ASSESSMENT
             </p>
 
 
-            <h2>
-              Discover more about yourself.
-            </h2>
+            {/* =================================================
+                LOADING
+            ================================================= */}
+
+            {assessmentLoading ? (
+
+              <>
+
+                <h2>
+                  Loading your assessment...
+                </h2>
 
 
-            <p>
-              Your assessment is designed
-              according to your current
-              stage of education. Take your
-              time and answer each statement
-              honestly.
-            </p>
+                <p>
+                  We're checking which
+                  assessment is assigned
+                  to your student standard.
+                </p>
 
 
-            <div className="assessment-meta">
+                <div className="assessment-meta">
 
-              <div>
+                  <div>
 
-                <span>
-                  Questions
-                </span>
+                    <span>
+                      Questions
+                    </span>
 
-                <strong>
-                  {assessmentLoading
-                    ? "..."
-                    : questionCount}
-                </strong>
+                    <strong>
+                      ...
+                    </strong>
 
-              </div>
+                  </div>
 
 
-              <div>
+                  <div>
 
-                <span>
-                  Response
-                </span>
+                    <span>
+                      Response
+                    </span>
 
-                <strong>
-                  {assessmentLoading
-                    ? "..."
-                    : responseScale
-                      ? `${responseScale} Point Scale`
-                      : "—"}
-                </strong>
+                    <strong>
+                      ...
+                    </strong>
 
-              </div>
+                  </div>
 
 
-              <div>
+                  <div>
 
-                <span>
-                  Status
-                </span>
+                    <span>
+                      Status
+                    </span>
 
-                <strong>
-                  Not Started
-                </strong>
+                    <strong>
+                      Loading
+                    </strong>
 
-              </div>
+                  </div>
 
-            </div>
+                </div>
+
+              </>
+
+            ) : assessment ? (
+
+              /* =================================================
+                 ASSESSMENT FOUND
+              ================================================= */
+
+              <>
+
+                <h2>
+                  {assessmentName}
+                </h2>
 
 
-            {error && (
-              <p>
-                {error}
-              </p>
+                <p>
+                  {assessment.description ||
+                    "Your assessment is designed according to your current stage of education. Take your time and answer each statement honestly."}
+                </p>
+
+
+                <div className="assessment-meta">
+
+
+                  <div>
+
+                    <span>
+                      Questions
+                    </span>
+
+                    <strong>
+                      {questionCount}
+                    </strong>
+
+                  </div>
+
+
+                  <div>
+
+                    <span>
+                      Response
+                    </span>
+
+                    <strong>
+
+                      {responseScale
+                        ? `${responseScale} Point Scale`
+                        : "—"}
+
+                    </strong>
+
+                  </div>
+
+
+                  <div>
+
+                    <span>
+                      Status
+                    </span>
+
+                    <strong>
+                      Not Started
+                    </strong>
+
+                  </div>
+
+
+                </div>
+
+
+                <Link
+                  to="/assessment"
+                  className="dashboard-start-button"
+                >
+
+                  Start Assessment
+
+                  <span>
+                    →
+                  </span>
+
+                </Link>
+
+              </>
+
+            ) : (
+
+              /* =================================================
+                 NO ASSESSMENT
+              ================================================= */
+
+              <>
+
+                <h2>
+                  No assessment assigned yet.
+                </h2>
+
+
+                <p>
+                  {assessmentError ||
+                    "There is currently no assessment assigned to your student standard."}
+                </p>
+
+
+                <div className="assessment-meta">
+
+
+                  <div>
+
+                    <span>
+                      Questions
+                    </span>
+
+                    <strong>
+                      —
+                    </strong>
+
+                  </div>
+
+
+                  <div>
+
+                    <span>
+                      Response
+                    </span>
+
+                    <strong>
+                      —
+                    </strong>
+
+                  </div>
+
+
+                  <div>
+
+                    <span>
+                      Status
+                    </span>
+
+                    <strong>
+                      Unavailable
+                    </strong>
+
+                  </div>
+
+                </div>
+
+              </>
+
             )}
-
-
-            <Link
-              to="/assessment"
-              className="dashboard-start-button"
-            >
-              Start Assessment
-
-              <span>
-                →
-              </span>
-
-            </Link>
 
           </div>
 
 
-          {/* Visual */}
+          {/* =================================================
+              VISUAL
+          ================================================= */}
 
           <div className="dashboard-card-visual">
 
@@ -361,26 +567,34 @@ function Dashboard() {
               className="dashboard-orbit orbit-a"
             />
 
+
             <div
               className="dashboard-orbit orbit-b"
             />
 
+
             <div
               className="dashboard-center"
             >
+
               <span>
                 NM
               </span>
+
             </div>
 
           </div>
 
+
         </section>
 
 
-        {/* Bottom cards */}
+        {/* ===================================================
+            BOTTOM CARDS
+        =================================================== */}
 
         <section className="dashboard-bottom-grid">
+
 
           <Link
             to="/profile"
@@ -397,6 +611,7 @@ function Dashboard() {
               <h3>
                 My Profile
               </h3>
+
 
               <p>
                 View and manage your
@@ -431,6 +646,7 @@ function Dashboard() {
                 My Report
               </h3>
 
+
               <p>
                 Your personalized report
                 will appear here after
@@ -446,12 +662,16 @@ function Dashboard() {
 
           </div>
 
+
         </section>
+
 
       </main>
 
     </div>
+
   );
+
 }
 
 
