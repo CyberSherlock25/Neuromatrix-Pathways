@@ -45,14 +45,17 @@ function Login() {
     setLoading(true);
 
     try {
-      await login(
-        formData.username,
-        formData.password
-      );
+          const loggedInUser = await login(
+            formData.username,
+            formData.password
+          );
 
-      navigate("/dashboard");
-
-    } catch (err) {
+          if (loggedInUser.is_staff) {
+            navigate("/admin");
+          } else {
+            navigate("/dashboard");
+          }
+     } catch (err) {
       console.error(err);
 
       if (err.response?.status === 401) {

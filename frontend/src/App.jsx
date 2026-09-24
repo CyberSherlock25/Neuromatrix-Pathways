@@ -15,7 +15,11 @@ import AssessmentCompleted from "./pages/AssessmentCompleted";
 import Report from "./pages/Report";
 
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./components/AdminRoute";
 import { AuthProvider } from "./context/AuthContext";
+
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminAssessments from "./pages/AdminAssessments";
 
 
 function App() {
@@ -54,6 +58,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminDashboard />
+            </AdminRoute>
+          }
+        />
 
           <Route
             path="/profile"
@@ -97,6 +110,15 @@ function App() {
               <ProtectedRoute>
                 <Report />
               </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/assessments"
+            element={
+              <AdminRoute>
+                <AdminAssessments />
+              </AdminRoute>
             }
           />
 

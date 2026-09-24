@@ -5,6 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.db import transaction
+from .services.scoring import calculate_assessment_result
 
 from rest_framework.decorators import (
     api_view,
@@ -150,7 +152,6 @@ def save_response(request, attempt_id):
             else status.HTTP_200_OK
         ),
     )
-
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def complete_attempt(request, attempt_id):
@@ -166,17 +167,85 @@ def complete_attempt(request, attempt_id):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    attempt.is_completed = True
-    attempt.completed_at = timezone.now()
+    # ---------------------------------------------------------
+    # Find all required questions for this assessment
+    # ---------------------------------------------------------
 
-    attempt.save(
-        update_fields=[
-            "is_completed",
-            "completed_at",
-        ]
+    required_questions = Question.objects.filter(
+        section__assessment=attempt.assessment,
+        is_active=True,
+        is_required=True,
     )
 
+    required_question_count = required_questions.count()
+
+    # ---------------------------------------------------------
+    # Find answers submitted for this attempt
+    # ---------------------------------------------------------
+
+    answered_question_count = (
+        AssessmentResponse.objects.filter(
+            attempt=attempt,
+            question__section__assessment=attempt.assessment,
+            question__is_active=True,
+            question__is_required=True,
+        )
+        .values("question")
+        .distinct()
+        .count()
+    )
+
+    # ---------------------------------------------------------
+    # Prevent incomplete submissions
+    # ---------------------------------------------------------
+
+    if answered_question_count < required_question_count:
+        return Response(
+            {
+                "error": "Assessment is incomplete.",
+                "required_questions": required_question_count,
+                "answered_questions": answered_question_count,
+                "remaining_questions": (
+                    required_question_count
+                    - answered_question_count
+                ),
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    # ---------------------------------------------------------
+    # Complete + score atomically
+    # ---------------------------------------------------------
+
+    try:
+        with transaction.atomic():
+
+            attempt.is_completed = True
+            attempt.completed_at = timezone.now()
+
+            attempt.save(
+                update_fields=[
+                    "is_completed",
+                    "completed_at",
+                ]
+            )
+
+            result = calculate_assessment_result(
+                attempt
+            )
+
+    except ValueError as exc:
+        return Response(
+            {"error": str(exc)},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
     return Response(
-        AssessmentAttemptSerializer(attempt).data,
+        {
+            "message": "Assessment completed successfully.",
+            "attempt_id": attempt.id,
+            "result_id": result.id,
+            "is_completed": attempt.is_completed,
+        },
         status=status.HTTP_200_OK,
     )

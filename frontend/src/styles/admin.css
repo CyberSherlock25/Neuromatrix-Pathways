@@ -1,0 +1,891 @@
+/* =========================================================
+   NEUROMATRIX ADMIN
+   Matches Questionnaire Design System
+========================================================= */
+
+.admin-layout {
+  min-height: 100vh;
+  display: flex;
+
+  background:
+    radial-gradient(
+      circle at 85% 10%,
+      rgba(42, 137, 152, 0.07),
+      transparent 28%
+    ),
+    #f5f9fa;
+
+  color: #123b59;
+  font-family: inherit;
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.admin-sidebar {
+  width: 245px;
+  min-height: 100vh;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  background: white;
+
+  border-right: 1px solid #e0eaee;
+
+  z-index: 20;
+}
+
+
+/* Brand */
+
+.admin-brand {
+  height: 76px;
+
+  padding: 0 25px;
+
+  display: flex;
+  align-items: center;
+
+  border-bottom: 1px solid #e0eaee;
+}
+
+.admin-brand-logo {
+  width: 36px;
+  height: 36px;
+
+  display: grid;
+  place-items: center;
+
+  margin-right: 11px;
+
+  border-radius: 9px;
+
+  background: #123b59;
+
+  color: white;
+
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.admin-brand-text {
+  color: #123b59;
+
+  font-size: 17px;
+  font-weight: 350;
+
+  letter-spacing: -0.5px;
+}
+
+.admin-brand-text::first-letter {
+  font-weight: 700;
+}
+
+.admin-brand-subtitle {
+  display: block;
+
+  margin-top: 2px;
+
+  color: #8a9da6;
+
+  font-size: 9px;
+  font-weight: 700;
+
+  letter-spacing: 1.4px;
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.admin-nav {
+  flex: 1;
+
+  padding: 25px 12px;
+}
+
+.admin-nav-label {
+  padding: 0 12px;
+
+  margin-bottom: 9px;
+
+  color: #9aabb4;
+
+  font-size: 9px;
+  font-weight: 750;
+
+  letter-spacing: 1.7px;
+
+  text-transform: uppercase;
+}
+
+.admin-nav-item {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  padding: 11px 13px;
+  margin-bottom: 4px;
+
+  border: 1px solid transparent;
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: #718694;
+
+  font-family: inherit;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.admin-nav-item:hover {
+  background: #f0f8f8;
+
+  color: #247f91;
+
+  border-color: #e0eaee;
+}
+
+.admin-nav-item.active {
+  background: #e7f4f5;
+
+  color: #247f91;
+
+  border-color: #d5e9eb;
+}
+
+.admin-nav-icon {
+  width: 19px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #8a9da6;
+
+  font-size: 14px;
+}
+
+.admin-nav-item.active .admin-nav-icon {
+  color: #287f90;
+}
+
+
+/* =========================================================
+   SIDEBAR USER
+========================================================= */
+
+.admin-sidebar-bottom {
+  padding: 15px 12px;
+
+  border-top: 1px solid #e0eaee;
+}
+
+.admin-user-mini {
+  padding: 10px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  border-radius: 8px;
+}
+
+.admin-avatar {
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: #e7f4f5;
+
+  color: #247f91;
+
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.admin-user-name {
+  color: #123b59;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.admin-user-role {
+  margin-top: 2px;
+
+  color: #8a9da6;
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.admin-main {
+  min-width: 0;
+
+  flex: 1;
+
+  margin-left: 245px;
+}
+
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+
+.admin-topbar {
+  height: 76px;
+
+  padding: 0 7%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: white;
+
+  border-bottom: 1px solid #e0eaee;
+
+  position: sticky;
+  top: 0;
+
+  z-index: 10;
+}
+
+.admin-page-heading {
+  color: #123b59;
+
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.admin-breadcrumb {
+  margin-top: 3px;
+
+  color: #8a9da6;
+
+  font-size: 10px;
+}
+
+.admin-topbar-right {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.admin-status {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 7px 11px;
+
+  background: #f5f9fa;
+
+  border: 1px solid #dce7ea;
+
+  border-radius: 7px;
+
+  color: #718694;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.admin-status-dot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #287f90;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.admin-content {
+  width: min(1180px, 86%);
+
+  margin: 0 auto;
+
+  padding: 55px 0 80px;
+}
+
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.admin-title-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  margin-bottom: 30px;
+}
+
+.admin-title {
+  margin: 0;
+
+  color: #123b59;
+
+  font-size: 28px;
+  font-weight: 650;
+
+  letter-spacing: -1px;
+}
+
+.admin-description {
+  margin: 8px 0 0;
+
+  color: #718694;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   PRIMARY BUTTON
+========================================================= */
+
+.admin-primary-button {
+  min-height: 44px;
+
+  padding: 0 18px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #123b59;
+
+  color: white;
+
+  font-family: inherit;
+
+  font-size: 12px;
+  font-weight: 650;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+
+.admin-primary-button:hover {
+  background: #287f90;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   STAT CARDS
+========================================================= */
+
+.admin-stat-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 14px;
+
+  margin-bottom: 28px;
+}
+
+.admin-stat-card {
+  padding: 21px;
+
+  background: white;
+
+  border: 1px solid #e0eaee;
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 10px 30px rgba(18, 59, 89, 0.035);
+}
+
+.admin-stat-label {
+  color: #718694;
+
+  font-size: 10px;
+  font-weight: 650;
+
+  letter-spacing: 0.2px;
+}
+
+.admin-stat-value {
+  margin-top: 8px;
+
+  color: #123b59;
+
+  font-size: 25px;
+  font-weight: 700;
+
+  letter-spacing: -0.7px;
+}
+
+.admin-stat-meta {
+  margin-top: 4px;
+
+  color: #9aabb4;
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   PANEL
+========================================================= */
+
+.admin-panel {
+  overflow: hidden;
+
+  background: white;
+
+  border: 1px solid #e0eaee;
+
+  border-radius: 15px;
+
+  box-shadow:
+    0 18px 45px rgba(18, 59, 89, 0.045);
+}
+
+.admin-panel-header {
+  padding: 19px 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  border-bottom: 1px solid #e0eaee;
+}
+
+.admin-panel-title {
+  color: #123b59;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.admin-panel-subtitle {
+  margin-top: 3px;
+
+  color: #8a9da6;
+
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.admin-search {
+  width: 220px;
+
+  height: 36px;
+
+  padding: 0 11px;
+
+  background: #fbfcfd;
+
+  border: 1px solid #dce6ea;
+
+  border-radius: 8px;
+
+  color: #123b59;
+
+  font-family: inherit;
+
+  font-size: 11px;
+
+  outline: none;
+
+  transition: border-color 0.2s ease;
+}
+
+.admin-search::placeholder {
+  color: #9aabb4;
+}
+
+.admin-search:focus {
+  border-color: #78b7bf;
+
+  background: white;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.admin-table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+.admin-table th {
+  padding: 13px 20px;
+
+  background: #fbfcfd;
+
+  color: #8a9da6;
+
+  border-bottom: 1px solid #e0eaee;
+
+  text-align: left;
+
+  font-size: 9px;
+  font-weight: 750;
+
+  letter-spacing: 1px;
+
+  text-transform: uppercase;
+}
+
+.admin-table td {
+  padding: 17px 20px;
+
+  border-bottom: 1px solid #edf2f4;
+
+  color: #718694;
+
+  font-size: 11px;
+}
+
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.admin-table tbody tr:hover {
+  background: #fbfdfd;
+}
+
+
+/* =========================================================
+   ASSESSMENT
+========================================================= */
+
+.admin-assessment-name {
+  color: #123b59;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.admin-assessment-slug {
+  margin-top: 4px;
+
+  color: #9aabb4;
+
+  font-family: monospace;
+
+  font-size: 9px;
+}
+
+.admin-version {
+  color: #526c7b !important;
+}
+
+.admin-question-count {
+  color: #123b59;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.admin-badge {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 5px 9px;
+
+  border-radius: 7px;
+
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.admin-badge.active {
+  background: #e7f4f5;
+
+  color: #247f91;
+}
+
+.admin-badge.inactive {
+  background: #f1f4f5;
+
+  color: #8a9da6;
+}
+
+.admin-badge-dot {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background: currentColor;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.admin-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+}
+
+.admin-action {
+  min-height: 31px;
+
+  padding: 0 9px;
+
+  border: 1px solid #d8e3e7;
+
+  border-radius: 7px;
+
+  background: white;
+
+  color: #526c7b;
+
+  font-family: inherit;
+
+  font-size: 9px;
+  font-weight: 650;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.admin-action:hover {
+  border-color: #78b7bf;
+
+  background: #f0f8f8;
+
+  color: #247f91;
+}
+
+.admin-action.danger:hover {
+  border-color: #e2b8b8;
+
+  background: #fff7f7;
+
+  color: #b45353;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.admin-error {
+  padding: 12px 15px;
+
+  margin-bottom: 18px;
+
+  border: 1px solid #e5caca;
+
+  border-radius: 8px;
+
+  background: #fff7f7;
+
+  color: #a64b4b;
+
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.admin-loading {
+  padding: 55px;
+
+  text-align: center;
+
+  color: #8a9da6;
+
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   QUICK ACTION CARDS
+========================================================= */
+
+.admin-panel button.admin-action {
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+
+.admin-panel button.admin-action:hover {
+  transform: translateY(-1px);
+
+  background: #f5fafa;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+  .admin-stat-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+}
+
+@media (max-width: 800px) {
+
+  .admin-sidebar {
+    width: 70px;
+  }
+
+  .admin-brand {
+    justify-content: center;
+
+    padding: 0;
+  }
+
+  .admin-brand-text,
+  .admin-brand-subtitle,
+  .admin-nav-label,
+  .admin-user-mini > div {
+    display: none;
+  }
+
+  .admin-brand-logo {
+    margin-right: 0;
+  }
+
+  .admin-nav-item {
+    justify-content: center;
+
+    padding: 12px 0;
+  }
+
+  .admin-main {
+    margin-left: 70px;
+  }
+
+  .admin-content {
+    width: 90%;
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  .admin-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-topbar {
+    padding: 0 5%;
+  }
+
+  .admin-content {
+    width: 92%;
+
+    padding-top: 40px;
+  }
+
+  .admin-title-row {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .admin-panel-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .admin-search {
+    width: 100%;
+  }
+
+}

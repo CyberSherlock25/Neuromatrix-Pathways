@@ -7,6 +7,10 @@ from .views import (
     save_response,
     complete_attempt,
 )
+from .admin_views import (
+    AdminAssessmentListCreateView,
+    AdminAssessmentDetailView,
+)
 
 urlpatterns = [
     # General assessment endpoints
@@ -34,5 +38,18 @@ urlpatterns = [
         "<slug:slug>/",
         assessment_detail,
         name="assessment-detail",
+    ),
+
+    # Admin assessment endpoints
+    path(
+    "admin/assessments/",
+    AdminAssessmentListCreateView.as_view(),
+    name="admin-assessment-list-create",
+    ),
+
+    path(
+        "admin/assessments/<int:pk>/",
+        AdminAssessmentDetailView.as_view(),
+        name="admin-assessment-detail",
     ),
 ]

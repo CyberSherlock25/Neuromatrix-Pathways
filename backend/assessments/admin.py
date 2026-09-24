@@ -9,6 +9,9 @@ from .models import (
     QuestionDimension,
     AssessmentAttempt,
     Response,
+    AssessmentResult,
+    DimensionResult,
+    ScoringConfiguration,
 )
 
 
@@ -152,3 +155,36 @@ class ResponseAdmin(admin.ModelAdmin):
     list_filter = (
         "selected_option",
     )
+
+@admin.register(ScoringConfiguration)
+class ScoringConfigurationAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "assessment",
+        "scoring_method",
+        "aggregation_method",
+        "reverse_rule",
+        "normalization_method",
+        "input_min",
+        "input_max",
+        "output_min",
+        "output_max",
+        "version",
+        "is_active",
+    )
+
+    list_filter = (
+        "scoring_method",
+        "aggregation_method",
+        "normalization_method",
+        "is_active",
+    )
+
+    search_fields = (
+        "assessment__name",
+        "assessment__slug",
+        "version",
+    )
+
+admin.site.register(AssessmentResult)
+admin.site.register(DimensionResult)

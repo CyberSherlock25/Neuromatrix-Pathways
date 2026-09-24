@@ -56,6 +56,16 @@ class UserSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "student_status",
+            "is_staff",
+        ]
+        read_only_fields = [
+            "id",
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+            "student_status",
+            "is_staff",
         ]
 
     def get_student_status(self, obj):
