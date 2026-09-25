@@ -583,6 +583,9 @@ const AdminQuestionBank = () => {
           <button
             type="button"
             className="admin-nav-item"
+            onClick={()=>
+            navigate("/admin/dimensions")
+          }
           >
             <span className="admin-nav-icon">
               ◉

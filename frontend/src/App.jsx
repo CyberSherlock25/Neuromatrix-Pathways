@@ -21,6 +21,8 @@ import { AuthProvider } from "./context/AuthContext";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminAssessments from "./pages/AdminAssessments";
 import AdminQuestionBank from "./pages/AdminQuestionBank";
+import AdminDimensions from "./pages/AdminDimensions";
+
 
 function App() {
   return (
@@ -127,6 +129,15 @@ function App() {
             element={
               <AdminRoute>
                 <AdminQuestionBank />
+              </AdminRoute>
+            }
+          />
+
+          <Route
+            path="/admin/dimensions"
+            element={
+              <AdminRoute>
+                <AdminDimensions />
               </AdminRoute>
             }
           />

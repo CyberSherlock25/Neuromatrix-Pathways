@@ -92,7 +92,7 @@ const AdminDashboard = () => {
           </button>
 
           <button className="admin-nav-item"
-          onclick={()=>
+          onClick={()=>
             navigate("/admin/questions")
           }>
             <span className="admin-nav-icon">
@@ -101,7 +101,10 @@ const AdminDashboard = () => {
             Question Bank
           </button>
 
-          <button className="admin-nav-item">
+          <button className="admin-nav-item"
+          onClick={()=>
+            navigate("/admin/dimensions")
+          }>
             <span className="admin-nav-icon">
               ◉
             </span>
