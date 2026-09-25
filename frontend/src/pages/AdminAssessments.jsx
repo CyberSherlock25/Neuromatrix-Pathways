@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import AdminSidebar from "../components/AdminSidebar";
+
 import {
   getAdminAssessments,
   createAdminAssessment,
@@ -502,7 +502,203 @@ const AdminAssessments = () => {
           SIDEBAR
       ===================================================== */}
 
-      <AdminSidebar />
+      <aside className="admin-sidebar">
+
+
+        {/* ===================================================
+            BRAND
+        =================================================== */}
+
+        <div className="admin-brand">
+
+          <div className="admin-brand-logo">
+            N
+          </div>
+
+
+          <div>
+
+            <div className="admin-brand-text">
+              Neuromatrix
+            </div>
+
+
+            <span className="admin-brand-subtitle">
+              ADMIN CONSOLE
+            </span>
+
+          </div>
+
+        </div>
+
+
+        {/* ===================================================
+            NAVIGATION
+        =================================================== */}
+
+        <nav className="admin-nav">
+
+
+          {/* WORKSPACE */}
+
+          <div className="admin-nav-label">
+            Workspace
+          </div>
+
+
+          <button
+            type="button"
+            className="admin-nav-item"
+            onClick={() =>
+              navigate("/admin")
+            }
+          >
+
+            <span className="admin-nav-icon">
+              ▦
+            </span>
+
+            Dashboard
+
+          </button>
+
+
+          <button
+            type="button"
+            className="admin-nav-item active"
+          >
+
+            <span className="admin-nav-icon">
+              ◈
+            </span>
+
+            Assessments
+
+          </button>
+
+
+          <button
+            type="button"
+            className="admin-nav-item"
+            onClick={()=>
+              navigate("/admin/questions")
+            }
+          >
+
+            <span className="admin-nav-icon">
+              ☷
+            </span>
+
+            Question Bank
+
+          </button>
+
+
+          <button
+            type="button"
+            className="admin-nav-item"
+            onClick={()=>
+            navigate("/admin/dimensions")
+          }
+          >
+
+            <span className="admin-nav-icon">
+              ◉
+            </span>
+
+            Dimensions
+
+          </button>
+
+
+          <button
+            type="button"
+            className="admin-nav-item"
+          >
+
+            <span className="admin-nav-icon">
+              ⚙
+            </span>
+
+            Scoring
+
+          </button>
+
+
+          {/* =================================================
+              OPERATIONS
+          ================================================= */}
+
+          <div
+            className="admin-nav-label"
+            style={{
+              marginTop: "25px",
+            }}
+          >
+            Operations
+          </div>
+
+
+          <button
+            type="button"
+            className="admin-nav-item"
+          >
+
+            <span className="admin-nav-icon">
+              ♙
+            </span>
+
+            Psychologists
+
+          </button>
+
+
+          <button
+            type="button"
+            className="admin-nav-item"
+          >
+
+            <span className="admin-nav-icon">
+              ◫
+            </span>
+
+            Reports
+
+          </button>
+
+
+          {/* =================================================
+              ACCOUNT
+          ================================================= */}
+
+          <div
+            className="admin-nav-label"
+            style={{
+              marginTop: "25px",
+            }}
+          >
+            Account
+          </div>
+
+
+          <button
+            type="button"
+            className="admin-nav-item"
+            onClick={handleLogout}
+          >
+
+            <span className="admin-nav-icon">
+              ↪
+            </span>
+
+            Logout
+
+          </button>
+
+
+        </nav>
+
+      </aside>
 
 
       {/* =====================================================
