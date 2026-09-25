@@ -65,7 +65,7 @@
  ```bash
  npm run lint
  ```
-..........
+
  ## Application Routes
 
  | Route | Purpose |
