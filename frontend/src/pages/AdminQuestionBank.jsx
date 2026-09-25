@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "../styles/admin.css";
-
-import { useAuth } from "../context/AuthContext";
+import AdminSidebar from "../components/AdminSidebar";
 
 import {
   getAdminAssessments,
@@ -50,7 +49,6 @@ const DEFAULT_OPTIONS = [
 const AdminQuestionBank = () => {
   const navigate = useNavigate();
 
-  const { logout } = useAuth();
 
 
   // =========================================================
@@ -469,17 +467,6 @@ const AdminQuestionBank = () => {
     }
   };
 
-
-  // =========================================================
-  // LOGOUT
-  // =========================================================
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
-
-
   // =========================================================
   // SELECTED DATA
   // =========================================================
@@ -510,162 +497,8 @@ const AdminQuestionBank = () => {
           SIDEBAR
       ===================================================== */}
 
-      <aside className="admin-sidebar">
+     <AdminSidebar />
 
-        <div className="admin-brand">
-
-          <div className="admin-brand-logo">
-            N
-          </div>
-
-          <div>
-            <div className="admin-brand-text">
-              Neuromatrix
-            </div>
-
-            <span className="admin-brand-subtitle">
-              ADMIN CONSOLE
-            </span>
-          </div>
-
-        </div>
-
-
-        <nav className="admin-nav">
-
-          <div className="admin-nav-label">
-            Workspace
-          </div>
-
-
-          <button
-            type="button"
-            className="admin-nav-item"
-            onClick={() =>
-              navigate("/admin")
-            }
-          >
-            <span className="admin-nav-icon">
-              ▦
-            </span>
-
-            Dashboard
-          </button>
-
-
-          <button
-            type="button"
-            className="admin-nav-item"
-            onClick={() =>
-              navigate("/admin/assessments")
-            }
-          >
-            <span className="admin-nav-icon">
-              ◈
-            </span>
-
-            Assessments
-          </button>
-
-
-          <button
-            type="button"
-            className="admin-nav-item active"
-          >
-            <span className="admin-nav-icon">
-              ☷
-            </span>
-
-            Question Bank
-          </button>
-
-
-          <button
-            type="button"
-            className="admin-nav-item"
-            onClick={()=>
-            navigate("/admin/dimensions")
-          }
-          >
-            <span className="admin-nav-icon">
-              ◉
-            </span>
-
-            Dimensions
-          </button>
-
-
-          <button
-            type="button"
-            className="admin-nav-item"
-          >
-            <span className="admin-nav-icon">
-              ⚙
-            </span>
-
-            Scoring
-          </button>
-
-
-          <div
-            className="admin-nav-label"
-            style={{
-              marginTop: "25px",
-            }}
-          >
-            Operations
-          </div>
-
-
-          <button
-            type="button"
-            className="admin-nav-item"
-          >
-            <span className="admin-nav-icon">
-              ♙
-            </span>
-
-            Psychologists
-          </button>
-
-
-          <button
-            type="button"
-            className="admin-nav-item"
-          >
-            <span className="admin-nav-icon">
-              ◫
-            </span>
-
-            Reports
-          </button>
-
-
-          <div
-            className="admin-nav-label"
-            style={{
-              marginTop: "25px",
-            }}
-          >
-            Account
-          </div>
-
-
-          <button
-            type="button"
-            className="admin-nav-item"
-            onClick={handleLogout}
-          >
-            <span className="admin-nav-icon">
-              ↪
-            </span>
-
-            Logout
-          </button>
-
-        </nav>
-
-      </aside>
 
 
       {/* =====================================================

@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 
 import {
   getDimensions,
@@ -9,12 +7,10 @@ import {
 
 import "../styles/admin.css";
 
+import AdminSidebar from "../components/AdminSidebar";
+
 
 const AdminDimensions = () => {
-
-  const navigate = useNavigate();
-  const { logout } = useAuth();
-
 
   // =========================================================
   // DIMENSIONS
@@ -241,19 +237,6 @@ const AdminDimensions = () => {
 
 
   // =========================================================
-  // LOGOUT
-  // =========================================================
-
-  const handleLogout = () => {
-
-    logout();
-
-    navigate("/login");
-
-  };
-
-
-  // =========================================================
   // RENDER
   // =========================================================
 
@@ -263,179 +246,10 @@ const AdminDimensions = () => {
 
 
       {/* =====================================================
-          SIDEBAR
+          CENTRALIZED ADMIN SIDEBAR
       ===================================================== */}
 
-      <aside className="admin-sidebar">
-
-
-        {/* BRAND */}
-
-        <div className="admin-brand">
-
-          <div className="admin-brand-logo">
-            N
-          </div>
-
-
-          <div>
-
-            <div className="admin-brand-text">
-              Neuromatrix
-            </div>
-
-            <span className="admin-brand-subtitle">
-              ADMIN CONSOLE
-            </span>
-
-          </div>
-
-        </div>
-
-
-        {/* NAVIGATION */}
-
-        <nav className="admin-nav">
-
-
-          <div className="admin-nav-label">
-            Workspace
-          </div>
-
-
-          <button
-            type="button"
-            className="admin-nav-item"
-            onClick={() =>
-              navigate("/admin")
-            }
-          >
-            <span className="admin-nav-icon">
-              ▦
-            </span>
-
-            Dashboard
-          </button>
-
-
-          <button
-            type="button"
-            className="admin-nav-item"
-            onClick={() =>
-              navigate("/admin/assessments")
-            }
-          >
-            <span className="admin-nav-icon">
-              ◈
-            </span>
-
-            Assessments
-          </button>
-
-
-          <button
-            type="button"
-            className="admin-nav-item"
-            onClick={() =>
-              navigate("/admin/questions")
-            }
-          >
-            <span className="admin-nav-icon">
-              ☷
-            </span>
-
-            Question Bank
-          </button>
-
-
-          <button
-            type="button"
-            className="admin-nav-item active"
-          >
-            <span className="admin-nav-icon">
-              ◉
-            </span>
-
-            Dimensions
-          </button>
-
-
-          <button
-            type="button"
-            className="admin-nav-item"
-          >
-            <span className="admin-nav-icon">
-              ⚙
-            </span>
-
-            Scoring
-          </button>
-
-
-          {/* OPERATIONS */}
-
-          <div
-            className="admin-nav-label"
-            style={{
-              marginTop: "25px",
-            }}
-          >
-            Operations
-          </div>
-
-
-          <button
-            type="button"
-            className="admin-nav-item"
-          >
-            <span className="admin-nav-icon">
-              ♙
-            </span>
-
-            Psychologists
-          </button>
-
-
-          <button
-            type="button"
-            className="admin-nav-item"
-          >
-            <span className="admin-nav-icon">
-              ◫
-            </span>
-
-            Reports
-          </button>
-
-
-          {/* ACCOUNT */}
-
-          <div
-            className="admin-nav-label"
-            style={{
-              marginTop: "25px",
-            }}
-          >
-            Account
-          </div>
-
-
-          <button
-            type="button"
-            className="admin-nav-item"
-            onClick={handleLogout}
-          >
-            <span className="admin-nav-icon">
-              ↪
-            </span>
-
-            Logout
-          </button>
-
-
-        </nav>
-
-      </aside>
+      <AdminSidebar />
 
 
       {/* =====================================================
@@ -445,7 +259,9 @@ const AdminDimensions = () => {
       <main className="admin-main">
 
 
-        {/* TOPBAR */}
+        {/* ===================================================
+            TOPBAR
+        =================================================== */}
 
         <header className="admin-topbar">
 
@@ -473,12 +289,16 @@ const AdminDimensions = () => {
         </header>
 
 
-        {/* CONTENT */}
+        {/* ===================================================
+            CONTENT
+        =================================================== */}
 
         <section className="admin-content">
 
 
-          {/* TITLE */}
+          {/* =================================================
+              TITLE
+          ================================================= */}
 
           <div className="admin-title-row">
 
@@ -498,7 +318,9 @@ const AdminDimensions = () => {
           </div>
 
 
-          {/* ERROR */}
+          {/* =================================================
+              ERROR
+          ================================================= */}
 
           {error && (
 
@@ -509,7 +331,9 @@ const AdminDimensions = () => {
           )}
 
 
-          {/* SUCCESS */}
+          {/* =================================================
+              SUCCESS
+          ================================================= */}
 
           {success && (
 
@@ -695,7 +519,6 @@ const AdminDimensions = () => {
 
               </div>
 
-
             </form>
 
           </div>
@@ -842,7 +665,6 @@ const AdminDimensions = () => {
             )}
 
           </div>
-
 
         </section>
 
