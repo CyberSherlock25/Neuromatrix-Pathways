@@ -4,7 +4,6 @@ import {
   Route,
 } from "react-router-dom";
 
-
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -15,30 +14,23 @@ import Assessment from "./pages/Assessment";
 import AssessmentCompleted from "./pages/AssessmentCompleted";
 import Report from "./pages/Report";
 
-
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
-
 import { AuthProvider } from "./context/AuthContext";
-
 
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminAssessments from "./pages/AdminAssessments";
 import AdminQuestionBank from "./pages/AdminQuestionBank";
 import AdminDimensions from "./pages/AdminDimensions";
-import AdminQuestionMappings from "./pages/AdminQuestionMappings";
 
 
 function App() {
-
   return (
-
     <AuthProvider>
 
       <BrowserRouter>
 
         <Routes>
-
 
           {/* ================= PUBLIC ================= */}
 
@@ -69,6 +61,14 @@ function App() {
             }
           />
 
+          <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminDashboard />
+            </AdminRoute>
+          }
+        />
 
           <Route
             path="/profile"
@@ -79,7 +79,6 @@ function App() {
             }
           />
 
-
           <Route
             path="/assessment"
             element={
@@ -88,7 +87,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
 
           <Route
             path="/assessment/questions"
@@ -99,7 +97,6 @@ function App() {
             }
           />
 
-
           <Route
             path="/assessment/completed"
             element={
@@ -108,7 +105,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
 
           <Route
             path="/report"
@@ -119,20 +115,6 @@ function App() {
             }
           />
 
-
-          {/* ================= ADMIN ================= */}
-
-
-          <Route
-            path="/admin"
-            element={
-              <AdminRoute>
-                <AdminDashboard />
-              </AdminRoute>
-            }
-          />
-
-
           <Route
             path="/admin/assessments"
             element={
@@ -141,8 +123,7 @@ function App() {
               </AdminRoute>
             }
           />
-
-
+          
           <Route
             path="/admin/questions"
             element={
@@ -151,7 +132,6 @@ function App() {
               </AdminRoute>
             }
           />
-
 
           <Route
             path="/admin/dimensions"
@@ -162,25 +142,12 @@ function App() {
             }
           />
 
-
-          <Route
-            path="/admin/mappings"
-            element={
-              <AdminRoute>
-                <AdminQuestionMappings />
-              </AdminRoute>
-            }
-          />
-
-
         </Routes>
 
       </BrowserRouter>
 
     </AuthProvider>
-
   );
 }
-
 
 export default App;
