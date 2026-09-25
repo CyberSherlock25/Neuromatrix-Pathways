@@ -12,27 +12,21 @@ from .views import (
 from .admin_views import (
     AdminAssessmentListCreateView,
     AdminAssessmentDetailView,
+    AdminSectionListCreateView,
+    AdminQuestionListCreateView,
+    AdminOptionListCreateView,
+    AdminDimensionListCreateView,
+    AdminQuestionDimensionListCreateView,
     admin_dashboard_stats,
 )
 
 
 urlpatterns = [
-
-    # =========================================================
-    # GENERAL ASSESSMENT ENDPOINTS
-    # =========================================================
-
     path(
         "health/",
         health_check,
         name="health-check",
     ),
-
-
-    # =========================================================
-    # STUDENT ASSESSMENT ENDPOINTS
-    # IMPORTANT: Must come BEFORE <slug:slug>/
-    # =========================================================
 
     path(
         "my-assessment/",
@@ -40,44 +34,9 @@ urlpatterns = [
         name="my-assessment",
     ),
 
-
-    # =========================================================
-    # ATTEMPT ENDPOINTS
-    # =========================================================
-
-    path(
-        "attempts/<int:attempt_id>/responses/",
-        save_response,
-        name="save-response",
-    ),
-
-    path(
-        "attempts/<int:attempt_id>/complete/",
-        complete_attempt,
-        name="complete-attempt",
-    ),
-
-
-    # =========================================================
-    # ASSESSMENT ENDPOINTS
-    # =========================================================
-
-    path(
-        "<slug:slug>/attempts/",
-        start_attempt,
-        name="start-attempt",
-    ),
-
-    path(
-        "<slug:slug>/",
-        assessment_detail,
-        name="assessment-detail",
-    ),
-
-
-    # =========================================================
-    # ADMIN ASSESSMENT ENDPOINTS
-    # =========================================================
+    # -------------------------
+    # Admin APIs
+    # -------------------------
 
     path(
         "admin/assessments/",
@@ -92,8 +51,66 @@ urlpatterns = [
     ),
 
     path(
+        "admin/sections/",
+        AdminSectionListCreateView.as_view(),
+        name="admin-section-list-create",
+    ),
+
+    path(
+        "admin/questions/",
+        AdminQuestionListCreateView.as_view(),
+        name="admin-question-list-create",
+    ),
+
+    path(
+        "admin/options/",
+        AdminOptionListCreateView.as_view(),
+        name="admin-option-list-create",
+    ),
+
+    path(
         "admin/dashboard/stats/",
         admin_dashboard_stats,
         name="admin-dashboard-stats",
+    ),
+
+    path(
+        "admin/dimensions/",
+        AdminDimensionListCreateView.as_view(),
+        name="admin-dimension-list-create",
+    ),
+
+    path(
+        "admin/question-dimensions/",
+        AdminQuestionDimensionListCreateView.as_view(),
+        name="admin-question-dimension-list-create",
+    ),
+
+    # -------------------------
+    # Student APIs
+    # -------------------------
+
+    path(
+        "attempts/<int:attempt_id>/responses/",
+        save_response,
+        name="save-response",
+    ),
+
+    path(
+        "attempts/<int:attempt_id>/complete/",
+        complete_attempt,
+        name="complete-attempt",
+    ),
+
+    path(
+        "<slug:slug>/attempts/",
+        start_attempt,
+        name="start-attempt",
+    ),
+
+    path(
+        "<slug:slug>/",
+        assessment_detail,
+        name="assessment-detail",
     ),
 ]

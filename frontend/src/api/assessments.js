@@ -42,8 +42,8 @@ export const saveResponse = async (
   const response = await api.post(
     `/assessments/attempts/${attemptId}/responses/`,
     {
-      question_id: questionId,
-      option_id: optionId,
+      question: questionId,
+      selected_option: optionId,
     }
   );
 

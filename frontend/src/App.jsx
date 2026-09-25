@@ -20,7 +20,7 @@ import { AuthProvider } from "./context/AuthContext";
 
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminAssessments from "./pages/AdminAssessments";
-
+import AdminQuestionBank from "./pages/AdminQuestionBank";
 
 function App() {
   return (
@@ -118,6 +118,15 @@ function App() {
             element={
               <AdminRoute>
                 <AdminAssessments />
+              </AdminRoute>
+            }
+          />
+          
+          <Route
+            path="/admin/questions"
+            element={
+              <AdminRoute>
+                <AdminQuestionBank />
               </AdminRoute>
             }
           />

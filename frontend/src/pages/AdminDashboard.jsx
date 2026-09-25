@@ -91,7 +91,10 @@ const AdminDashboard = () => {
             Assessments
           </button>
 
-          <button className="admin-nav-item">
+          <button className="admin-nav-item"
+          onclick={()=>
+            navigate("/admin/questions")
+          }>
             <span className="admin-nav-icon">
               ☷
             </span>
@@ -312,6 +315,9 @@ const AdminDashboard = () => {
                   height: "70px",
                   textAlign: "left",
                 }}
+                onClick={() =>
+                  navigate("/admin/questions")
+                }
               >
                 <strong>
                   Question Bank

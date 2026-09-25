@@ -580,6 +580,9 @@ const AdminAssessments = () => {
           <button
             type="button"
             className="admin-nav-item"
+            onClick={()=>
+              navigate("/admin/questions")
+            }
           >
 
             <span className="admin-nav-icon">

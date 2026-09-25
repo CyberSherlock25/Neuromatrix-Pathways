@@ -1,6 +1,14 @@
 from rest_framework import serializers
 
-from .models import Assessment, AssessmentAssignment, Question
+from .models import (
+    Assessment,
+    AssessmentAssignment,
+    Question,
+    Section,
+    Option,
+    Dimension,
+    QuestionDimension,
+)
 from accounts.models import UserProfile
 
 
@@ -115,3 +123,143 @@ class AdminAssessmentSerializer(serializers.ModelSerializer):
                 )
 
         return instance
+
+
+class AdminOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Option
+        fields = [
+            "id",
+            "question",
+            "text",
+            "value",
+            "order",
+        ]
+
+        read_only_fields = [
+            "id",
+            "question",
+        ]
+
+    def validate_value(self, value):
+        if value < 0:
+            raise serializers.ValidationError(
+                "Option value cannot be negative."
+            )
+
+        return value
+
+
+class AdminQuestionSerializer(serializers.ModelSerializer):
+    options = AdminOptionSerializer(
+        many=True,
+        read_only=True,
+    )
+
+    class Meta:
+        model = Question
+        fields = [
+            "id",
+            "section",
+            "text",
+            "question_type",
+            "order",
+            "is_required",
+            "is_active",
+            "options",
+        ]
+
+        read_only_fields = [
+            "id",
+            "options",
+        ]
+
+    def validate_section(self, value):
+        if not value:
+            raise serializers.ValidationError(
+                "Section is required."
+            )
+
+        return value
+
+
+class AdminSectionSerializer(serializers.ModelSerializer):
+    questions = AdminQuestionSerializer(
+        many=True,
+        read_only=True,
+    )
+
+    class Meta:
+        model = Section
+        fields = [
+            "id",
+            "assessment",
+            "name",
+            "description",
+            "order",
+            "questions",
+        ]
+
+        read_only_fields = [
+            "id",
+            "questions",
+        ]
+class AdminDimensionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dimension
+        fields = [
+            "id",
+            "name",
+            "code",
+            "description",
+        ]
+
+        read_only_fields = [
+            "id",
+        ]
+
+    def validate_name(self, value):
+        value = value.strip()
+
+        if not value:
+            raise serializers.ValidationError(
+                "Dimension name cannot be empty."
+            )
+
+        return value
+
+    def validate_code(self, value):
+        value = value.strip().lower()
+
+        if not value:
+            raise serializers.ValidationError(
+                "Dimension code cannot be empty."
+            )
+
+        return value
+
+
+class AdminQuestionDimensionSerializer(
+    serializers.ModelSerializer
+):
+    class Meta:
+        model = QuestionDimension
+        fields = [
+            "id",
+            "question",
+            "dimension",
+            "weight",
+            "reverse_scored",
+        ]
+
+        read_only_fields = [
+            "id",
+        ]
+
+    def validate_weight(self, value):
+        if value <= 0:
+            raise serializers.ValidationError(
+                "Weight must be greater than 0."
+            )
+
+        return value
