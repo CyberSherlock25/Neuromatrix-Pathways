@@ -844,9 +844,39 @@ button {
     font-size: 19px;
   }
 
-  .nav-links a:not(.nav-login):not(.nav-get-started) {
-    display: none;
-  }
+.nav-links a {
+  color: #31556f;
+  font-size: 15px;
+  transition: 0.2s ease;
+}
+
+.nav-link {
+  position: relative;
+}
+
+.nav-link:hover {
+  color: #238395;
+}
+
+.nav-link.active {
+  color: #123b59;
+  font-weight: 700;
+}
+
+.nav-link.active::after {
+  content: "";
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: -8px;
+
+  height: 2px;
+
+  background: #238395;
+
+  border-radius: 10px;
+}
 
   .nav-links {
     gap: 8px;

@@ -4,9 +4,24 @@ import {
   Route,
 } from "react-router-dom";
 
+// ================= PUBLIC PAGES =================
+
 import Home from "./pages/Home";
+import About from "./pages/About";
+import WhyCounselling from "./pages/WhyCounselling";
+import Insights from "./pages/Insights";
+import Services from "./pages/Services";
+import Contact from "./pages/Contact";
+
+
+// ================= AUTH PAGES =================
+
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+
+
+// ================= STUDENT PAGES =================
+
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import AssessmentIntro from "./pages/AssessmentIntro";
@@ -14,13 +29,24 @@ import Assessment from "./pages/Assessment";
 import AssessmentCompleted from "./pages/AssessmentCompleted";
 import Report from "./pages/Report";
 
+
+// ================= ROUTE PROTECTION =================
+
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
+
+
+// ================= AUTH CONTEXT =================
+
 import { AuthProvider } from "./context/AuthContext";
+
+
+// ================= ADMIN PAGES =================
 
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminAssessments from "./pages/AdminAssessments";
 import AdminQuestionBank from "./pages/AdminQuestionBank";
+
 
 function App() {
   return (
@@ -30,12 +56,55 @@ function App() {
 
         <Routes>
 
-          {/* ================= PUBLIC ================= */}
+          {/* =====================================================
+              PUBLIC WEBSITE
+              ===================================================== */}
 
+          {/* Home */}
           <Route
             path="/"
             element={<Home />}
           />
+
+
+          {/* About */}
+          <Route
+            path="/about"
+            element={<About />}
+          />
+
+
+          {/* Why Counselling */}
+          <Route
+            path="/why-counselling"
+            element={<WhyCounselling />}
+          />
+
+
+          {/* Insights */}
+          <Route
+            path="/insights"
+            element={<Insights />}
+          />
+
+
+          {/* Services */}
+          <Route
+            path="/services"
+            element={<Services />}
+          />
+
+
+          {/* Contact */}
+          <Route
+            path="/contact"
+            element={<Contact />}
+          />
+
+
+          {/* =====================================================
+              AUTHENTICATION
+              ===================================================== */}
 
           <Route
             path="/login"
@@ -48,8 +117,11 @@ function App() {
           />
 
 
-          {/* ================= PROTECTED ================= */}
+          {/* =====================================================
+              STUDENT / PROTECTED ROUTES
+              ===================================================== */}
 
+          {/* Student Dashboard */}
           <Route
             path="/dashboard"
             element={
@@ -59,15 +131,8 @@ function App() {
             }
           />
 
-          <Route
-          path="/admin"
-          element={
-            <AdminRoute>
-              <AdminDashboard />
-            </AdminRoute>
-          }
-        />
 
+          {/* Student Profile */}
           <Route
             path="/profile"
             element={
@@ -77,6 +142,8 @@ function App() {
             }
           />
 
+
+          {/* Assessment Introduction */}
           <Route
             path="/assessment"
             element={
@@ -86,6 +153,8 @@ function App() {
             }
           />
 
+
+          {/* Assessment Questions */}
           <Route
             path="/assessment/questions"
             element={
@@ -95,6 +164,8 @@ function App() {
             }
           />
 
+
+          {/* Assessment Completed */}
           <Route
             path="/assessment/completed"
             element={
@@ -104,6 +175,8 @@ function App() {
             }
           />
 
+
+          {/* Student Report */}
           <Route
             path="/report"
             element={
@@ -113,6 +186,23 @@ function App() {
             }
           />
 
+
+          {/* =====================================================
+              ADMIN ROUTES
+              ===================================================== */}
+
+          {/* Admin Dashboard */}
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+            }
+          />
+
+
+          {/* Admin Assessments */}
           <Route
             path="/admin/assessments"
             element={
@@ -121,7 +211,9 @@ function App() {
               </AdminRoute>
             }
           />
-          
+
+
+          {/* Admin Question Bank */}
           <Route
             path="/admin/questions"
             element={

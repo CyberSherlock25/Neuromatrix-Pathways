@@ -1,46 +1,231 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import "../styles/editorial.css";
-
-const pathways = [
-  ["01", "Science Stream Fit", "Explore how your curiosity, study rhythm, and problem-solving style align with science-led subjects.", "SCIENCE", "8–12", "50 QUESTIONS"],
-  ["02", "Commerce Stream Fit", "Understand the relationship between your analytical strengths, people skills, and business interests.", "COMMERCE", "8–12", "50 QUESTIONS"],
-  ["03", "Engineering Pathway", "Reflect on systems thinking, persistence, and the kind of problems you want to spend time solving.", "ENGINEERING", "UNDERGRAD", "50 QUESTIONS"],
-  ["04", "Design & Creative Pathway", "Map imagination, visual thinking, and sensitivity to experience into possible creative directions.", "CREATIVE", "ALL STAGES", "50 QUESTIONS"],
-];
-
-const insights = [
-  ["STUDY TIP", "A study rhythm that works with your mind", "Small changes in environment and timing can make reflection and learning feel more natural.", "5 MIN READ"],
-  ["CHOOSING A STREAM", "How to choose without choosing from fear", "Use your patterns, not pressure, as a starting point for exploring academic directions.", "6 MIN READ"],
-  ["WELLBEING", "Making space around exam anxiety", "A clear next step is often more useful than a perfect long-term plan.", "4 MIN READ"],
-];
+import Navbar from "../components/Navbar";
 
 function Mark() {
-  return <span className="editorial-mark" aria-hidden="true"><i /></span>;
+  return (
+    <span className="editorial-mark" aria-hidden="true">
+      <i />
+    </span>
+  );
 }
 
 export default function Home() {
-  const [openPathway, setOpenPathway] = useState(0);
-  const [trait, setTrait] = useState("COGNITIVE STYLE");
-  return <div className="editorial-page">
-    <header className="editorial-nav"><Link to="/" className="editorial-brand"><Mark /><span><strong>NEUROMATRIX</strong><small>PATHWAYS · STUDENT ASSESSMENT PLATFORM</small></span></Link><nav aria-label="Primary navigation"><a href="#how-it-works">HOW IT WORKS</a><a href="#assessments">ASSESSMENTS</a><a href="#insights">INSIGHTS</a><a href="#methodology">METHODOLOGY</a><Link className="editorial-guide" to="/report">◌ CAREER GUIDE</Link><Link className="editorial-nav-cta" to="/signup">START ASSESSMENT <span>→</span></Link></nav></header>
-+
-+    <main>
-+      <section className="editorial-hero"><div className="editorial-hero-copy"><p className="editorial-eyebrow">ASSESSMENT <b>•</b> CLARITY <b>•</b> SELF-DISCOVERY</p><h1>Understand your strengths.<br /><em>Choose your direction.</em></h1><p className="editorial-lede">NeuroMatrix Pathways helps students turn honest self-reflection into evidence-informed academic and career possibilities.</p><div className="editorial-actions"><Link to="/signup" className="editorial-button editorial-button-dark">START YOUR ASSESSMENT <span>→</span></Link><a href="#how-it-works" className="editorial-button editorial-button-outline">EXPLORE HOW IT WORKS</a></div><div className="editorial-trust"><span>◉ EVIDENCE-INFORMED</span><i>•</i><span>◇ STUDENT-FIRST</span><i>•</i><span>◌ PRIVATE & SECURE</span></div></div><div className="editorial-hero-visual"><div className="editorial-photo-placeholder"><div className="editorial-orbit orbit-a" /><div className="editorial-orbit orbit-b" /><div className="editorial-visual-core"><Mark /><strong>YOUR<br /><em>PATH</em></strong></div><span className="visual-note">A clearer way forward</span></div><div className="editorial-float-card"><Mark /><div><strong>Personalized & secure</strong><small>Your responses are used to shape your insight.</small></div><b>DATA PRIVACY</b></div></div></section>
-+
-+      <section id="how-it-works" className="editorial-section editorial-sage"><div className="editorial-section-intro"><div><p className="editorial-eyebrow">THE NEUROMATRIX JOURNEY</p><h2>Start where you are.<br /><em>See what is possible.</em></h2></div><p>There is no single right answer to your future. Our process gives you a thoughtful structure for discovering the patterns already present in you.</p></div><div className="editorial-steps">{[["01", "DISCOVER", "Begin with your context, questions, and the experiences that have shaped how you learn."], ["02", "ASSESS", "Respond to structured Likert-based statements designed for your stage of education."], ["03", "GROW", "Receive a personal report that turns reflection into practical pathway experiments."]].map(([number, title, copy]) => <article key={number}><span>{number}</span><h3>{title}</h3><p>{copy}</p><a href="#assessments">READ MORE <b>→</b></a></article>)}</div></section>
-+
-+      <section id="assessments" className="editorial-section editorial-assessments"><div className="editorial-section-intro"><div><p className="editorial-eyebrow">ASSESSMENTS <b>•</b> YOUR NEXT QUESTION</p><h2>Support for where<br /><em>you are headed.</em></h2></div><p className="editorial-note">Hover or tap any pathway below to explore its focus, format, and duration.</p></div><div className="editorial-accordion">{pathways.map(([number, title, copy, tag, stage, duration], index) => <article className={openPathway === index ? "is-open" : ""} key={title}><button type="button" onClick={() => setOpenPathway(openPathway === index ? -1 : index)}><span className="accordion-number">{number}</span><strong>{title}</strong><span>{openPathway === index ? "COLLAPSE －" : "EXPLORE ＋"}</span></button>{openPathway === index && <div className="accordion-detail"><p>{copy}</p><div><small>FRAMEWORKS / TAGS</small><b>{tag}</b><b>{stage}</b><b>{duration}</b></div><div><small>WHO THIS SERVES</small><p>Students exploring a more confident relationship with their next academic or career decision.</p><Link to="/signup">START THIS ASSESSMENT →</Link></div></div>}</article>)}</div></section>
-+
-+      <section className="editorial-section editorial-sage editorial-insights"><div className="editorial-tabs">{["COGNITIVE STYLE", "EMOTIONAL REGULATION", "SOCIAL ORIENTATION", "WORK PREFERENCE", "IDENTITY & VALUES"].map((item) => <button className={trait === item ? "active" : ""} onClick={() => setTrait(item)} type="button" key={item}>{item}</button>)}</div><div className="insight-layout"><div className="insight-orbit"><div className="insight-ring ring-one" /><div className="insight-ring ring-two" /><div className="insight-ring ring-three" /><i className="insight-dot dot-one" /><i className="insight-dot dot-two" /><i className="insight-dot dot-three" /><div><Mark /><strong>{trait.split(" ")[0]}</strong></div></div><div className="insight-copy"><p className="editorial-eyebrow">TRAIT INSIGHT</p><h2>Your pattern is a<br /><em>place to begin.</em></h2><p>When you understand how you naturally approach uncertainty, effort, and collaboration, the next choice becomes a conversation rather than a verdict.</p><div className="reflection-callout"><small>✦ REFLECTION PROMPT</small><strong>Notice before you decide.</strong><p>Which kind of problem keeps your attention even when no one is asking you to solve it?</p></div><blockquote>“Curiosity is not a destination. It is a way of moving.”</blockquote></div></div></section>
-+
-+      <section id="methodology" className="editorial-section editorial-method"><div className="editorial-section-intro"><div><p className="editorial-eyebrow">OUR METHODOLOGY</p><h2>A framework for<br /><em>meaningful movement.</em></h2></div><p>Each phase is designed to make the next one feel more grounded, personal, and useful.</p></div><div className="method-grid">{[["01", "PHASE 1", "Map Your Profile", "Start with your educational stage, goals, and the context behind your questions.", "INTAKE / ONBOARDING"], ["02", "PHASE 2", "Explore Through Assessment", "Use carefully structured statements to notice your interests, preferences, and strengths.", "LIKERT-BASED REFLECTION"], ["03", "PHASE 3", "Chart Your Pathway", "Translate your patterns into recommendations and small experiments for what comes next.", "REPORT / RECOMMENDATIONS"]].map(([num, phase, title, copy, foot]) => <article key={phase}><span>{num}</span><small>{phase}</small><h3>{title}</h3><p>{copy}</p><hr /><em>{foot}</em></article>)}</div></section>
-+
-+      <section id="insights" className="editorial-section editorial-resources"><div className="resources-heading"><div><p className="editorial-eyebrow">INSIGHTS & GUIDES</p><h2>Ideas for your<br /><em>next conversation.</em></h2></div><a href="#insights">VIEW ALL →</a></div><div className="resource-grid">{insights.map(([category, title, copy, time]) => <article key={title}><small>{category} · {time}</small><h3>{title}</h3><p>{copy}</p><hr /><a href="#insights">READ FULL ARTICLE <b>→</b></a></article>)}</div></section>
-+
-+      <section className="editorial-cta"><div><p className="editorial-eyebrow">YOUR NEXT STEP STARTS HERE</p><h2>Ready to discover<br /><em>your path?</em></h2><p>Begin with a little honest curiosity. We will help you make sense of what you find.</p></div><div><Link to="/signup" className="editorial-button editorial-button-light">START ASSESSMENT →</Link><Link to="/login" className="editorial-button editorial-button-ghost">SIGN IN</Link></div></section>
-+    </main>
-+
-+    <footer className="editorial-footer"><div><Link to="/" className="editorial-brand"><Mark /><span><strong>NEUROMATRIX</strong><small>PATHWAYS · STUDENT ASSESSMENT PLATFORM</small></span></Link><p>Understand yourself. Choose your direction.</p></div><div><p className="editorial-eyebrow">GET SUPPORT</p><p>Student assessment platform<br />Available for every stage of your journey.</p></div><div><p className="editorial-eyebrow">EXPLORE</p><a href="#how-it-works">How It Works</a><a href="#assessments">Assessments</a><a href="#insights">Insights & Guides</a></div></footer>
-  </div>;
+  return (
+    <div className="editorial-page home-page">
+
+      {/* =====================================================
+          NAVBAR
+          ===================================================== */}
+
+      <Navbar />
+
+
+      {/* =====================================================
+          LANDING HERO
+          ===================================================== */}
+
+      <main>
+
+        <section className="landing-hero">
+
+          {/* LEFT CONTENT */}
+
+          <div className="landing-hero-content">
+
+            <p className="editorial-eyebrow">
+              ASSESSMENT <b>•</b> CLARITY <b>•</b> SELF-DISCOVERY
+            </p>
+
+
+            <h1>
+              Understand
+              <br />
+              your strengths.
+              <br />
+              <em>Choose your direction.</em>
+            </h1>
+
+
+            <p className="landing-description">
+              NeuroMatrix Pathways helps students turn honest
+              self-reflection into evidence-informed academic
+              and career possibilities.
+            </p>
+
+
+            <div className="landing-actions">
+
+              <Link
+                to="/signup"
+                className="editorial-button editorial-button-dark"
+              >
+                START YOUR ASSESSMENT
+                <span>→</span>
+              </Link>
+
+
+              <Link
+                to="/about"
+                className="editorial-button editorial-button-outline"
+              >
+                DISCOVER NEUROMATRIX
+              </Link>
+
+            </div>
+
+
+            <div className="editorial-trust">
+
+              <span>
+                ◉ EVIDENCE-INFORMED
+              </span>
+
+              <i>•</i>
+
+              <span>
+                ◇ STUDENT-FIRST
+              </span>
+
+              <i>•</i>
+
+              <span>
+                ◌ PRIVATE &amp; SECURE
+              </span>
+
+            </div>
+
+          </div>
+
+
+          {/* RIGHT VISUAL */}
+
+          <div className="landing-hero-visual">
+
+            <div className="landing-visual-card">
+
+              <span className="landing-visual-label">
+                A CLEARER WAY FORWARD
+              </span>
+
+
+              <div className="landing-orbit orbit-one" />
+
+              <div className="landing-orbit orbit-two" />
+
+              <div className="landing-orbit orbit-three" />
+
+
+              <div className="landing-core">
+
+                <Mark />
+
+                <strong>
+                  YOUR
+                  <br />
+                  <em>PATH</em>
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <div className="landing-floating-card">
+
+              <Mark />
+
+              <div>
+
+                <strong>
+                  Personalized &amp; secure
+                </strong>
+
+                <small>
+                  Your responses help shape your individual insight.
+                </small>
+
+              </div>
+
+              <span>
+                DATA PRIVACY
+              </span>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </main>
+
+
+      {/* =====================================================
+          SMALL FOOTER
+          ===================================================== */}
+
+      <footer className="landing-footer">
+
+        <div className="landing-footer-brand">
+
+          <Link
+            to="/"
+            className="editorial-brand"
+          >
+
+            <Mark />
+
+            <span>
+
+              <strong>
+                NEUROMATRIX
+              </strong>
+
+              <small>
+                PATHWAYS · STUDENT ASSESSMENT PLATFORM
+              </small>
+
+            </span>
+
+          </Link>
+
+        </div>
+
+
+        <div className="landing-footer-links">
+
+          <Link to="/about">
+            About
+          </Link>
+
+          <Link to="/why-counselling">
+            Why Counselling
+          </Link>
+
+          <Link to="/insights">
+            Insights
+          </Link>
+
+          <Link to="/services">
+            Services
+          </Link>
+
+          <Link to="/contact">
+            Contact
+          </Link>
+
+        </div>
+
+
+        <div className="landing-footer-copy">
+
+          <span>
+            © {new Date().getFullYear()} NeuroMatrix Pathways
+          </span>
+
+        </div>
+
+      </footer>
+
+    </div>
+  );
 }
