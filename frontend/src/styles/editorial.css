@@ -30,3 +30,11 @@
 .scroll-likert-option { color:var(--forest)!important; background:#fff!important; border-color:var(--border-hairline)!important; }.scroll-likert-option.selected { color:#fff!important; background:var(--forest)!important; border-color:var(--forest)!important; }
 .profile-status-card.active,.status-option.active { color:var(--forest)!important; background:#e9ede7!important; border-color:var(--forest)!important; }
 .footer { color:var(--ink-muted)!important; background:var(--bg-cream)!important; border-color:var(--border-hairline)!important; }
+.admin-layout { color:var(--ink)!important; background:var(--bg-cream)!important; }
+.admin-sidebar { color:#fff!important; background:var(--forest)!important; border-color:var(--forest)!important; }
+.admin-brand,.admin-brand-text,.admin-nav-label,.admin-sidebar .admin-brand-subtitle,.admin-user-name,.admin-user-role { color:#fff!important; }
+.admin-brand { border-color:rgba(255,255,255,.16)!important; }.admin-brand-logo { color:var(--forest)!important; background:var(--bg-cream)!important; }
+.admin-nav-item { color:rgba(255,255,255,.68)!important; }.admin-nav-item:hover,.admin-nav-item.active { color:var(--forest)!important; background:var(--bg-sage)!important; border-color:transparent!important; }
+.admin-main,.admin-header,.admin-content { color:var(--ink)!important; background:var(--bg-cream)!important; }.admin-card,.admin-panel,.admin-table-wrap { color:var(--ink)!important; background:#fff!important; border-color:var(--border-hairline)!important; }
+.admin-section-title,.admin-page-title,.admin-card-title { color:var(--forest)!important; font-family:'DM Serif Display',Georgia,serif!important; }.admin-stat-value,.admin-accent,.admin-link { color:var(--terracotta)!important; }
+.admin-button,.admin-primary-button { color:#fff!important; background:var(--forest)!important; border-color:var(--forest)!important; }.admin-button:hover,.admin-primary-button:hover { background:var(--forest-hover)!important; }
