@@ -1,121 +1,196 @@
+import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 
 function Navbar() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
+
   return (
-    <nav className="navbar">
+    <header className="site-navbar">
 
-      {/* ================= LOGO ================= */}
+      <div className="site-navbar-inner">
 
-      <Link to="/" className="brand">
-        <span className="brand-main">
-          NeuroMatrix
-        </span>
+        {/* ================= LOGO ================= */}
 
-        <span className="brand-sub">
-          Pathways
-        </span>
-      </Link>
-
-
-      {/* ================= NAVIGATION ================= */}
-
-      <div className="nav-links">
-
-        {/* HOME */}
-
-        <NavLink
+        <Link
           to="/"
-          end
-          className={({ isActive }) =>
-            isActive ? "nav-link active" : "nav-link"
-          }
+          className="site-brand"
+          onClick={closeMenu}
         >
-          Home
-        </NavLink>
+          <span className="site-brand-main">
+            NeuroMatrix
+          </span>
 
-
-        {/* ABOUT */}
-
-        <NavLink
-          to="/about"
-          className={({ isActive }) =>
-            isActive ? "nav-link active" : "nav-link"
-          }
-        >
-          About
-        </NavLink>
-
-
-        {/* WHY COUNSELLING */}
-
-        <NavLink
-          to="/why-counselling"
-          className={({ isActive }) =>
-            isActive ? "nav-link active" : "nav-link"
-          }
-        >
-          Why Counselling
-        </NavLink>
-
-
-        {/* INSIGHTS */}
-
-        <NavLink
-          to="/insights"
-          className={({ isActive }) =>
-            isActive ? "nav-link active" : "nav-link"
-          }
-        >
-          Insights
-        </NavLink>
-
-
-        {/* SERVICES */}
-
-        <NavLink
-          to="/services"
-          className={({ isActive }) =>
-            isActive ? "nav-link active" : "nav-link"
-          }
-        >
-          Services
-        </NavLink>
-
-
-        {/* CONTACT */}
-
-        <NavLink
-          to="/contact"
-          className={({ isActive }) =>
-            isActive ? "nav-link active" : "nav-link"
-          }
-        >
-          Contact
-        </NavLink>
-
-
-        {/* ================= LOGIN ================= */}
-
-        <Link
-          to="/login"
-          className="nav-login"
-        >
-          Login
+          <span className="site-brand-sub">
+            Pathways
+          </span>
         </Link>
 
 
-        {/* ================= CTA ================= */}
+        {/* ================= DESKTOP NAV ================= */}
 
-        <Link
-          to="/signup"
-          className="nav-get-started"
+        <nav
+          className={`site-navigation ${
+            menuOpen ? "is-open" : ""
+          }`}
+          aria-label="Main navigation"
         >
-          Start Assessment →
-        </Link>
+
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              `site-nav-link ${
+                isActive ? "active" : ""
+              }`
+            }
+            onClick={closeMenu}
+          >
+            Home
+          </NavLink>
+
+
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              `site-nav-link ${
+                isActive ? "active" : ""
+              }`
+            }
+            onClick={closeMenu}
+          >
+            About
+          </NavLink>
+
+
+          <NavLink
+            to="/why-counselling"
+            className={({ isActive }) =>
+              `site-nav-link ${
+                isActive ? "active" : ""
+              }`
+            }
+            onClick={closeMenu}
+          >
+            Why Counselling
+          </NavLink>
+
+
+          <NavLink
+            to="/insights"
+            className={({ isActive }) =>
+              `site-nav-link ${
+                isActive ? "active" : ""
+              }`
+            }
+            onClick={closeMenu}
+          >
+            Insights
+          </NavLink>
+
+
+          <NavLink
+            to="/services"
+            className={({ isActive }) =>
+              `site-nav-link ${
+                isActive ? "active" : ""
+              }`
+            }
+            onClick={closeMenu}
+          >
+            Services
+          </NavLink>
+
+
+          <NavLink
+            to="/contact"
+            className={({ isActive }) =>
+              `site-nav-link ${
+                isActive ? "active" : ""
+              }`
+            }
+            onClick={closeMenu}
+          >
+            Contact
+          </NavLink>
+
+
+          {/* ================= MOBILE ACTIONS ================= */}
+
+          <div className="site-mobile-actions">
+
+            <Link
+              to="/login"
+              className="site-login-button"
+              onClick={closeMenu}
+            >
+              Login
+            </Link>
+
+            <Link
+              to="/signup"
+              className="site-cta-button"
+              onClick={closeMenu}
+            >
+              Start Assessment
+              <span>→</span>
+            </Link>
+
+          </div>
+
+        </nav>
+
+
+        {/* ================= DESKTOP ACTIONS ================= */}
+
+        <div className="site-desktop-actions">
+
+          <Link
+            to="/login"
+            className="site-login-button"
+          >
+            Login
+          </Link>
+
+          <Link
+            to="/signup"
+            className="site-cta-button"
+          >
+            Start Assessment
+            <span>→</span>
+          </Link>
+
+        </div>
+
+
+        {/* ================= MOBILE MENU BUTTON ================= */}
+
+        <button
+          type="button"
+          className={`site-menu-toggle ${
+            menuOpen ? "is-open" : ""
+          }`}
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label={
+            menuOpen
+              ? "Close navigation menu"
+              : "Open navigation menu"
+          }
+          aria-expanded={menuOpen}
+        >
+
+          <span />
+          <span />
+          <span />
+
+        </button>
 
       </div>
 
-    </nav>
+    </header>
   );
 }
 
