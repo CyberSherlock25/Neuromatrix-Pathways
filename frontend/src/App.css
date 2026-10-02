@@ -844,39 +844,9 @@ button {
     font-size: 19px;
   }
 
-.nav-links a {
-  color: #31556f;
-  font-size: 15px;
-  transition: 0.2s ease;
-}
-
-.nav-link {
-  position: relative;
-}
-
-.nav-link:hover {
-  color: #238395;
-}
-
-.nav-link.active {
-  color: #123b59;
-  font-weight: 700;
-}
-
-.nav-link.active::after {
-  content: "";
-  position: absolute;
-
-  left: 0;
-  right: 0;
-  bottom: -8px;
-
-  height: 2px;
-
-  background: #238395;
-
-  border-radius: 10px;
-}
+  .nav-links a:not(.nav-login):not(.nav-get-started) {
+    display: none;
+  }
 
   .nav-links {
     gap: 8px;
@@ -4546,5 +4516,40 @@ button {
   .completed-primary-button,
   .completed-secondary-button {
     width: 100%;
+  }
+}/* =========================================================
+   ROUTE LOADING
+   ========================================================= */
+
+.route-loading {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  background: #f7f9fa;
+  color: #526473;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.route-loading-spinner {
+  width: 20px;
+  height: 20px;
+
+  border: 2px solid rgba(11, 31, 51, 0.14);
+  border-top-color: #0b1f33;
+
+  border-radius: 50%;
+
+  animation: routeSpinner 0.7s linear infinite;
+}
+
+@keyframes routeSpinner {
+  to {
+    transform: rotate(360deg);
   }
 }

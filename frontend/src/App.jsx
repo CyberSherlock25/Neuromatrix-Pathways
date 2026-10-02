@@ -4,23 +4,13 @@ import {
   Route,
 } from "react-router-dom";
 
-// ================= PUBLIC PAGES =================
+/* ================= PUBLIC PAGES ================= */
 
 import Home from "./pages/Home";
-import About from "./pages/About";
-import WhyCounselling from "./pages/WhyCounselling";
-import Insights from "./pages/Insights";
-import Services from "./pages/Services";
-import Contact from "./pages/Contact";
-
-
-// ================= AUTH PAGES =================
-
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 
-
-// ================= STUDENT PAGES =================
+/* ================= STUDENT PAGES ================= */
 
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
@@ -29,82 +19,37 @@ import Assessment from "./pages/Assessment";
 import AssessmentCompleted from "./pages/AssessmentCompleted";
 import Report from "./pages/Report";
 
-
-// ================= ROUTE PROTECTION =================
-
-import ProtectedRoute from "./components/ProtectedRoute";
-import AdminRoute from "./components/AdminRoute";
-
-
-// ================= AUTH CONTEXT =================
-
-import { AuthProvider } from "./context/AuthContext";
-
-
-// ================= ADMIN PAGES =================
+/* ================= ADMIN PAGES ================= */
 
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminAssessments from "./pages/AdminAssessments";
 import AdminQuestionBank from "./pages/AdminQuestionBank";
 
+/* ================= ROUTE PROTECTION ================= */
+
+import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./components/AdminRoute";
+
+/* ================= AUTH ================= */
+
+import { AuthProvider } from "./context/AuthContext";
+
 
 function App() {
   return (
     <AuthProvider>
-
       <BrowserRouter>
 
         <Routes>
 
           {/* =====================================================
-              PUBLIC WEBSITE
+              PUBLIC
               ===================================================== */}
 
-          {/* Home */}
           <Route
             path="/"
             element={<Home />}
           />
-
-
-          {/* About */}
-          <Route
-            path="/about"
-            element={<About />}
-          />
-
-
-          {/* Why Counselling */}
-          <Route
-            path="/why-counselling"
-            element={<WhyCounselling />}
-          />
-
-
-          {/* Insights */}
-          <Route
-            path="/insights"
-            element={<Insights />}
-          />
-
-
-          {/* Services */}
-          <Route
-            path="/services"
-            element={<Services />}
-          />
-
-
-          {/* Contact */}
-          <Route
-            path="/contact"
-            element={<Contact />}
-          />
-
-
-          {/* =====================================================
-              AUTHENTICATION
-              ===================================================== */}
 
           <Route
             path="/login"
@@ -118,10 +63,9 @@ function App() {
 
 
           {/* =====================================================
-              STUDENT / PROTECTED ROUTES
+              STUDENT
               ===================================================== */}
 
-          {/* Student Dashboard */}
           <Route
             path="/dashboard"
             element={
@@ -131,8 +75,6 @@ function App() {
             }
           />
 
-
-          {/* Student Profile */}
           <Route
             path="/profile"
             element={
@@ -143,7 +85,10 @@ function App() {
           />
 
 
-          {/* Assessment Introduction */}
+          {/* =====================================================
+              ASSESSMENT
+              ===================================================== */}
+
           <Route
             path="/assessment"
             element={
@@ -153,8 +98,6 @@ function App() {
             }
           />
 
-
-          {/* Assessment Questions */}
           <Route
             path="/assessment/questions"
             element={
@@ -164,8 +107,6 @@ function App() {
             }
           />
 
-
-          {/* Assessment Completed */}
           <Route
             path="/assessment/completed"
             element={
@@ -176,7 +117,10 @@ function App() {
           />
 
 
-          {/* Student Report */}
+          {/* =====================================================
+              REPORT
+              ===================================================== */}
+
           <Route
             path="/report"
             element={
@@ -188,10 +132,9 @@ function App() {
 
 
           {/* =====================================================
-              ADMIN ROUTES
+              ADMIN
               ===================================================== */}
 
-          {/* Admin Dashboard */}
           <Route
             path="/admin"
             element={
@@ -201,8 +144,6 @@ function App() {
             }
           />
 
-
-          {/* Admin Assessments */}
           <Route
             path="/admin/assessments"
             element={
@@ -212,8 +153,6 @@ function App() {
             }
           />
 
-
-          {/* Admin Question Bank */}
           <Route
             path="/admin/questions"
             element={
@@ -223,10 +162,19 @@ function App() {
             }
           />
 
+
+          {/* =====================================================
+              FALLBACK
+              ===================================================== */}
+
+          <Route
+            path="*"
+            element={<Home />}
+          />
+
         </Routes>
 
       </BrowserRouter>
-
     </AuthProvider>
   );
 }

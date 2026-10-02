@@ -1,62 +1,53 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
-
-const assessments = [
+import "../styles/editorial.css";
+const insightCards = [
   {
-    number: "01",
-    title: "Map Your Profile",
-    tag: "DISCOVER",
-    description:
-      "Understand your interests, strengths, learning preferences, and the context behind your academic questions.",
-    details: ["INTERESTS", "STRENGTHS", "LEARNING STYLE"],
+    id: 1,
+    icon: "🧭",
+    category: "SELF-DISCOVERY",
+    title: "Understand before you choose.",
+    text:
+      "Good academic and career decisions begin with understanding your interests, strengths, preferences, and the kind of environment in which you work best.",
+    points: [
+      "Know what genuinely interests you",
+      "Recognise your natural strengths",
+      "Understand your learning preferences",
+    ],
   },
   {
-    number: "02",
-    title: "Explore Through Assessment",
-    tag: "ASSESS",
-    description:
-      "Respond to structured statements designed to help you recognise patterns in how you think, work, and make decisions.",
-    details: ["50 QUESTIONS", "LIKERT SCALE", "STUDENT-FIRST"],
+    id: 2,
+    icon: "💡",
+    category: "DECISION MAKING",
+    title: "Explore beyond the obvious.",
+    text:
+      "Students often choose familiar options because they are easier to understand. Exploring different pathways can reveal possibilities that may otherwise remain unnoticed.",
+    points: [
+      "Look beyond familiar career choices",
+      "Compare different academic pathways",
+      "Consider your interests alongside opportunities",
+    ],
   },
   {
-    number: "03",
-    title: "Chart Your Pathway",
-    tag: "REFLECT",
-    description:
-      "Use the patterns from your assessment as a starting point for exploring academic and career possibilities.",
-    details: ["PERSONAL REPORT", "PATHWAYS", "NEXT STEPS"],
+    id: 3,
+    icon: "🌱",
+    category: "PERSONAL GROWTH",
+    title: "Progress does not need to be perfect.",
+    text:
+      "Your first decision does not have to define your entire future. Reflection, exploration, and informed conversations can help you move forward with greater clarity.",
+    points: [
+      "Allow yourself to explore",
+      "Learn from changing interests",
+      "Focus on practical next steps",
+    ],
   },
 ];
 
-const insights = [
-  {
-    type: "STUDY",
-    title: "Build a study rhythm that works for you.",
-  },
-  {
-    type: "DECISION",
-    title: "Choose with curiosity instead of pressure.",
-  },
-  {
-    type: "WELLBEING",
-    title: "Make space around academic uncertainty.",
-  },
-];
-
-function Mark() {
-  return (
-    <span className="insights-mark" aria-hidden="true">
-      <span />
-    </span>
-  );
-}
-
-export default function Insights() {
-  const [activeAssessment, setActiveAssessment] = useState(0);
+function Insights() {
   const [activeInsight, setActiveInsight] = useState(0);
 
-  const assessment = assessments[activeAssessment];
+  const activeCard = insightCards[activeInsight];
 
   return (
     <div className="insights-page">
@@ -66,101 +57,114 @@ export default function Insights() {
       <Navbar />
 
 
+      {/* ================= MAIN ================= */}
+
       <main>
 
         {/* ================= HERO ================= */}
 
-        <section className="insights-simple-hero">
+        <section className="insights-hero">
 
-          <div>
+          <div className="insights-hero-content">
 
-            <span className="insights-kicker">
+            <span className="insights-eyebrow">
               NEUROMATRIX / INSIGHTS
             </span>
 
             <h1>
-              Understand your
+              Think clearly.
               <br />
-              <em>next move.</em>
+              <em>Choose thoughtfully.</em>
             </h1>
+
+            <p>
+              Useful perspectives for students navigating academic
+              choices, career possibilities, and personal growth.
+            </p>
 
           </div>
 
-          <div className="insights-hero-side">
+
+          <div className="insights-hero-card">
+
+            <span>💭 A QUESTION TO CONSIDER</span>
+
+            <h3>
+              What are you naturally curious about?
+            </h3>
 
             <p>
-              A simple framework for understanding yourself,
-              exploring possibilities, and moving toward a clearer
-              academic direction.
+              Sometimes the questions that keep your attention
+              can tell you something important about the direction
+              you may want to explore.
             </p>
-
-            <Link to="/services">
-              EXPLORE SERVICES →
-            </Link>
 
           </div>
 
         </section>
 
 
-        {/* ================= ASSESSMENT ================= */}
+        {/* ================= INSIGHT EXPLORER ================= */}
 
-        <section className="insights-assessment">
+        <section className="insights-explorer">
 
-          <div className="section-heading">
+          <div className="insights-heading">
 
-            <div>
+            <span>
+              EXPLORE
+            </span>
 
-              <span>
-                01 / METHODOLOGY
-              </span>
-
-              <h2>
-                A framework for
-                <br />
-                <em>meaningful movement.</em>
-              </h2>
-
-            </div>
+            <h2>
+              A few ideas worth
+              <br />
+              <em>thinking about.</em>
+            </h2>
 
             <p>
-              Explore each stage of the NeuroMatrix process.
-              Select a step to see how it works.
+              Select an area to explore a little deeper.
             </p>
 
           </div>
 
 
-          <div className="assessment-layout">
+          <div className="insights-layout">
 
-            {/* LEFT TABS */}
+            {/* ================= TABS ================= */}
 
-            <div className="assessment-tabs">
+            <div className="insights-tabs">
 
-              {assessments.map((item, index) => (
+              {insightCards.map((card, index) => (
 
                 <button
-                  key={item.number}
+                  key={card.id}
                   type="button"
                   className={
-                    activeAssessment === index
-                      ? "assessment-tab active"
-                      : "assessment-tab"
+                    activeInsight === index
+                      ? "insight-tab active"
+                      : "insight-tab"
                   }
-                  onClick={() => setActiveAssessment(index)}
+                  onClick={() => setActiveInsight(index)}
                 >
 
-                  <span>
-                    {item.number}
+                  <span className="insight-tab-icon">
+                    {card.icon}
                   </span>
 
-                  <strong>
-                    {item.title}
-                  </strong>
+                  <span className="insight-tab-content">
 
-                  <b>
-                    {activeAssessment === index ? "−" : "+"}
-                  </b>
+                    <small>
+                      {card.category}
+                    </small>
+
+                    <strong>
+                      {card.title}
+                    </strong>
+
+                  </span>
+
+                  <span className="insight-tab-arrow">
+                    →
+                  </span>
 
                 </button>
 
@@ -169,183 +173,161 @@ export default function Insights() {
             </div>
 
 
-            {/* RIGHT DETAIL */}
+            {/* ================= ACTIVE CARD ================= */}
 
-            <div className="assessment-detail">
+            <article className="insight-feature">
 
-              <div className="assessment-detail-top">
+              <div className="insight-feature-top">
 
-                <span>
-                  {assessment.tag}
+                <span className="insight-feature-icon">
+                  {activeCard.icon}
                 </span>
 
                 <span>
-                  STEP {assessment.number}
+                  {activeCard.category}
                 </span>
 
               </div>
 
 
-              <Mark />
-
-
               <h3>
-                {assessment.title}
+                {activeCard.title}
               </h3>
 
 
-              <p>
-                {assessment.description}
+              <p className="insight-feature-description">
+                {activeCard.text}
               </p>
 
 
-              <div className="assessment-details">
+              <div className="insight-points">
 
-                {assessment.details.map((detail) => (
+                {activeCard.points.map((point, index) => (
 
-                  <span key={detail}>
-                    {detail}
-                  </span>
+                  <div
+                    className="insight-point"
+                    key={point}
+                  >
+
+                    <span>
+                      {index + 1}
+                    </span>
+
+                    <p>
+                      {point}
+                    </p>
+
+                  </div>
 
                 ))}
 
               </div>
 
-
-              <Link to="/signup">
-                START ASSESSMENT →
-              </Link>
-
-            </div>
+            </article>
 
           </div>
 
         </section>
 
 
-        {/* ================= TRAIT ================= */}
+        {/* ================= REFLECTION ================= */}
 
-        <section className="trait-strip">
+        <section className="insights-reflection">
 
-          <div className="trait-number">
-            02
+          <div className="reflection-symbol">
+            ✦
           </div>
 
-          <div className="trait-main">
+          <div className="reflection-content">
 
             <span>
-              TRAIT INSIGHT
+              TAKE A MOMENT
             </span>
 
             <h2>
-              Your pattern is a
+              Your interests can be
               <br />
-              <em>place to begin.</em>
+              <em>clues, not constraints.</em>
+            </h2>
+
+            <p>
+              You do not need to have everything figured out.
+              Start by noticing what attracts your attention,
+              what problems you enjoy solving, and what kind of
+              work feels meaningful to you.
+            </p>
+
+          </div>
+
+
+          <div className="reflection-question">
+
+            <span>
+              REFLECTION
+            </span>
+
+            <strong>
+              "What would I enjoy learning about even if nobody
+              asked me to?"
+            </strong>
+
+          </div>
+
+        </section>
+
+
+        {/* ================= PRACTICAL INSIGHT ================= */}
+
+        <section className="insights-practical">
+
+          <div>
+
+            <span>
+              A SIMPLE START
+            </span>
+
+            <h2>
+              Turn reflection
+              <br />
+              into a <em>next step.</em>
             </h2>
 
           </div>
 
-          <div className="trait-copy">
+
+          <div className="practical-content">
 
             <p>
-              Your responses are not a verdict about who you are.
-              They are a starting point for reflection and better
-              conversations about what comes next.
+              Clarity becomes more useful when it leads to
+              something practical. Write down one area that
+              interests you and explore it further.
             </p>
 
-            <div className="trait-prompt">
+            <div className="practical-actions">
 
-              <small>
-                REFLECTION PROMPT
-              </small>
+              <div>
+                <span>01</span>
+                <strong>Notice</strong>
+                <p>
+                  Identify what interests you.
+                </p>
+              </div>
 
-              <strong>
-                What kind of problem keeps your attention?
-              </strong>
+              <div>
+                <span>02</span>
+                <strong>Explore</strong>
+                <p>
+                  Learn about possible pathways.
+                </p>
+              </div>
 
-            </div>
-
-          </div>
-
-        </section>
-
-
-        {/* ================= INSIGHTS ================= */}
-
-        <section className="mini-insights">
-
-          <div className="section-heading">
-
-            <div>
-
-              <span>
-                03 / INSIGHTS
-              </span>
-
-              <h2>
-                Ideas for your
-                <br />
-                <em>next conversation.</em>
-              </h2>
-
-            </div>
-
-            <div className="insight-counter">
-              0{activeInsight + 1} / 0{insights.length}
-            </div>
-
-          </div>
-
-
-          <div className="insight-interactive">
-
-            <div className="insight-list">
-
-              {insights.map((item, index) => (
-
-                <button
-                  key={item.title}
-                  type="button"
-                  className={
-                    activeInsight === index
-                      ? "insight-item active"
-                      : "insight-item"
-                  }
-                  onClick={() => setActiveInsight(index)}
-                >
-
-                  <span>
-                    {item.type}
-                  </span>
-
-                  <strong>
-                    {item.title}
-                  </strong>
-
-                  <b>
-                    →
-                  </b>
-
-                </button>
-
-              ))}
-
-            </div>
-
-
-            <div className="insight-preview">
-
-              <span>
-                {insights[activeInsight].type}
-              </span>
-
-              <h3>
-                {insights[activeInsight].title}
-              </h3>
-
-              <Link to="/contact">
-                DISCUSS THIS WITH US →
-              </Link>
+              <div>
+                <span>03</span>
+                <strong>Discuss</strong>
+                <p>
+                  Talk through your options.
+                </p>
+              </div>
 
             </div>
 
@@ -361,20 +343,31 @@ export default function Insights() {
           <div>
 
             <span>
-              YOUR NEXT STEP
+              READY TO EXPLORE?
             </span>
 
             <h2>
               Start with
               <br />
-              <em>curiosity.</em>
+              <em>yourself.</em>
             </h2>
 
           </div>
 
-          <Link to="/signup">
-            START YOUR ASSESSMENT →
-          </Link>
+
+          <div className="insights-cta-actions">
+
+            <Link to="/signup">
+              START YOUR ASSESSMENT
+              <span>→</span>
+            </Link>
+
+            <Link to="/contact">
+              TALK TO US
+              <span>→</span>
+            </Link>
+
+          </div>
 
         </section>
 
@@ -385,32 +378,38 @@ export default function Insights() {
 
       <footer className="insights-footer">
 
-        <Link to="/">
-          NEUROMATRIX PATHWAYS
+        <Link
+          to="/"
+          className="insights-footer-brand"
+        >
+          NeuroMatrix
+          <span>Pathways</span>
         </Link>
 
-        <div>
+
+        <div className="insights-footer-links">
 
           <Link to="/about">
-            ABOUT
+            About
           </Link>
 
           <Link to="/why-counselling">
-            WHY COUNSELLING
+            Why Counselling
           </Link>
 
           <Link to="/services">
-            SERVICES
+            Services
           </Link>
 
           <Link to="/contact">
-            CONTACT
+            Contact
           </Link>
 
         </div>
 
-        <span>
-          © {new Date().getFullYear()}
+
+        <span className="insights-footer-copy">
+          © {new Date().getFullYear()} NeuroMatrix Pathways
         </span>
 
       </footer>
@@ -418,3 +417,5 @@ export default function Insights() {
     </div>
   );
 }
+
+export default Insights;

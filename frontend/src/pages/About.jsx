@@ -1,26 +1,33 @@
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import "../styles/editorial.css";
 
 function About() {
   return (
-    <div className="about-page">
+    <div className="nm-about">
 
-      {/* ================= NAVBAR ================= */}
+      {/* =====================================================
+          NAVBAR
+      ===================================================== */}
 
       <Navbar />
 
 
-      {/* ================= HERO ================= */}
+      {/* =====================================================
+          HERO
+      ===================================================== */}
 
-      <main>
+      <section className="nm-about-hero">
 
-        <section className="about-hero">
+        <div className="nm-about-hero-bg"></div>
 
-          <div className="about-hero-left">
+        <div className="nm-container nm-about-hero-content">
 
-            <span className="about-kicker">
-              NEUROMATRIX / ABOUT
-            </span>
+          <div className="nm-about-hero-copy">
+
+            <p className="nm-eyebrow nm-about-eyebrow">
+              🧠 ABOUT NEUROMATRIX
+            </p>
 
             <h1>
               Guidance built
@@ -28,315 +35,427 @@ function About() {
               around <em>you.</em>
             </h1>
 
-          </div>
-
-
-          <div className="about-hero-right">
-
             <p>
               NeuroMatrix Pathways brings together psychological
-              assessment, career guidance, and thoughtful
-              self-reflection to help students understand their
-              possibilities.
+              assessment, career guidance and thoughtful
+              self-reflection to help students understand
+              their possibilities.
             </p>
 
           </div>
 
-        </section>
+        </div>
+
+      </section>
 
 
-        {/* ================= FOUNDER ================= */}
+      {/* =====================================================
+          INTRODUCTION
+      ===================================================== */}
 
-        <section className="about-founder">
+      <section className="nm-section nm-section-light">
 
-          <div className="about-founder-image">
+        <div className="nm-container">
 
-            {/* 
-              Put the existing Dr. Seema Wagh image here:
+          <div className="nm-about-intro">
 
-              frontend/public/images/seema-wagh.jpg
-            */}
+            <div>
 
-            <img
-              src="/images/seema-wagh.jpg"
-              alt="Dr. Seema Wagh"
-            />
+              <p className="nm-eyebrow">
+                🌱 OUR PURPOSE
+              </p>
 
-          </div>
+              <h2 className="nm-title">
+                Before choosing a path,
+                <br />
+                <em>understand yourself.</em>
+              </h2>
 
+            </div>
 
-          <div className="about-founder-content">
-
-            <span className="about-label">
-              FOUNDER &amp; CAREER MENTOR
-            </span>
-
-            <h2>
-              About Dr. Seema Wagh
-            </h2>
-
-            <div className="about-line" />
-
-
-            <p>
-              Her academic achievements reflect both excellence
-              and dedication. She holds an M.Sc. in Zoology from
-              NMU, where she was awarded a Gold Medal, along with
-              qualifications including M.A. in Psychology, D.Lit.,
-              M.Phil., B.Ed., and a Diploma in Psychological
-              Assessment.
-            </p>
-
-
-            <p>
-              She has also pursued specialized training in Career
-              and Educational Counselling and psychological
-              assessment to further strengthen her expertise in
-              student guidance and counselling psychology.
-            </p>
-
-
-            <div className="about-highlight">
-
-              <span>
-                ACADEMIC EXCELLENCE
-              </span>
-
-              <strong>
-                Gold Medalist
-              </strong>
+            <div className="nm-about-intro-text">
 
               <p>
-                Psychology Expert&nbsp; · &nbsp;Career Counsellor
-                &nbsp; · &nbsp;Educational Mentor
+                Choosing a stream, course or career can feel
+                like a decision that has to be made perfectly.
+              </p>
+
+              <p>
+                Our approach starts somewhere different.
+                We create space for students to understand
+                their interests, strengths, preferences and
+                questions before turning those reflections
+                into possible directions.
               </p>
 
             </div>
 
           </div>
 
-        </section>
+        </div>
+
+      </section>
 
 
-        {/* ================= APPROACH ================= */}
+      {/* =====================================================
+          FOUNDER
+      ===================================================== */}
 
-        <section className="about-approach">
+      <section className="nm-section nm-about-founder-section">
 
-          <div className="about-section-heading">
+        <div className="nm-container">
 
-            <span>
-              01 / OUR APPROACH
-            </span>
+          <div className="nm-about-founder">
 
-            <h2>
-              More than a result.
-              <br />
-              <em>A clearer conversation.</em>
-            </h2>
+            <div className="nm-about-founder-image">
 
-          </div>
+              <img
+                src="/images/seema-wagh.jpg"
+                alt="Dr. Seema Wagh"
+              />
 
+              <div className="nm-founder-badge">
+                <span>🎓</span>
 
-          <div className="about-approach-copy">
+                <div>
+                  <strong>Gold Medalist</strong>
+                  <small>Academic Excellence</small>
+                </div>
+              </div>
 
-            <p>
-              Choosing a stream, course, or career can feel like
-              a decision that has to be made perfectly. Our approach
-              starts somewhere different.
-            </p>
-
-            <p>
-              We create space for students to understand their
-              interests, strengths, preferences, and questions
-              before turning those reflections into possible
-              directions.
-            </p>
-
-          </div>
-
-        </section>
-
-
-        {/* ================= THREE PRINCIPLES ================= */}
-
-        <section className="about-principles">
-
-          <article>
-
-            <span>01</span>
-
-            <h3>
-              UNDERSTAND
-            </h3>
-
-            <p>
-              Begin by understanding your own patterns,
-              interests, preferences, and strengths.
-            </p>
-
-          </article>
-
-
-          <article>
-
-            <span>02</span>
-
-            <h3>
-              EXPLORE
-            </h3>
-
-            <p>
-              Look beyond familiar choices and explore
-              academic and career possibilities with context.
-            </p>
-
-          </article>
-
-
-          <article>
-
-            <span>03</span>
-
-            <h3>
-              MOVE FORWARD
-            </h3>
-
-            <p>
-              Turn reflection into practical next steps
-              that you can actually explore.
-            </p>
-
-          </article>
-
-        </section>
-
-
-        {/* ================= CREDENTIALS ================= */}
-
-        <section className="about-credentials">
-
-          <div>
-
-            <span>
-              02 / BACKGROUND
-            </span>
-
-            <h2>
-              A multidisciplinary
-              <br />
-              <em>perspective.</em>
-            </h2>
-
-          </div>
-
-
-          <div className="credentials-list">
-
-            <div>
-              <span>ACADEMIC</span>
-              <strong>
-                M.Sc. · M.A. Psychology · D.Lit.
-              </strong>
             </div>
 
-            <div>
-              <span>ADDITIONAL</span>
-              <strong>
-                M.Phil. · B.Ed.
-              </strong>
-            </div>
 
-            <div>
-              <span>ASSESSMENT</span>
-              <strong>
-                Diploma in Psychological Assessment
-              </strong>
-            </div>
+            <div className="nm-about-founder-content">
 
-            <div>
-              <span>COUNSELLING</span>
-              <strong>
-                Career &amp; Educational Counselling Training
-              </strong>
+              <p className="nm-eyebrow">
+                👩‍🏫 FOUNDER & CAREER MENTOR
+              </p>
+
+              <h2 className="nm-title">
+                Meet Dr. Seema
+                <br />
+                <em>Wagh.</em>
+              </h2>
+
+              <div className="nm-about-divider"></div>
+
+              <p>
+                Her academic achievements reflect both
+                excellence and dedication. She holds an
+                M.Sc. in Zoology from NMU, where she was
+                awarded a Gold Medal, along with qualifications
+                including M.A. in Psychology, D.Lit., M.Phil.,
+                B.Ed., and a Diploma in Psychological Assessment.
+              </p>
+
+              <p>
+                She has also pursued specialized training in
+                Career and Educational Counselling and
+                psychological assessment to further strengthen
+                her expertise in student guidance and
+                counselling psychology.
+              </p>
+
+
+              <div className="nm-founder-expertise">
+
+                <div>
+                  <span>🧠</span>
+
+                  <div>
+                    <strong>Psychology</strong>
+                    <small>Psychological expertise</small>
+                  </div>
+                </div>
+
+                <div>
+                  <span>🎯</span>
+
+                  <div>
+                    <strong>Career Guidance</strong>
+                    <small>Student-focused counselling</small>
+                  </div>
+                </div>
+
+                <div>
+                  <span>📚</span>
+
+                  <div>
+                    <strong>Education</strong>
+                    <small>Educational mentoring</small>
+                  </div>
+                </div>
+
+              </div>
+
             </div>
 
           </div>
-
-        </section>
-
-
-        {/* ================= CTA ================= */}
-
-        <section className="about-cta">
-
-          <div>
-
-            <span>
-              YOUR NEXT STEP
-            </span>
-
-            <h2>
-              Understanding yourself
-              <br />
-              is a good <em>place to start.</em>
-            </h2>
-
-          </div>
-
-
-          <div className="about-cta-actions">
-
-            <Link to="/signup">
-              START ASSESSMENT →
-            </Link>
-
-            <Link to="/contact">
-              TALK TO US →
-            </Link>
-
-          </div>
-
-        </section>
-
-      </main>
-
-
-      {/* ================= FOOTER ================= */}
-
-      <footer className="about-footer">
-
-        <Link
-          to="/"
-          className="about-footer-brand"
-        >
-          NEUROMATRIX PATHWAYS
-        </Link>
-
-
-        <div>
-
-          <Link to="/why-counselling">
-            WHY COUNSELLING
-          </Link>
-
-          <Link to="/insights">
-            INSIGHTS
-          </Link>
-
-          <Link to="/services">
-            SERVICES
-          </Link>
-
-          <Link to="/contact">
-            CONTACT
-          </Link>
 
         </div>
 
+      </section>
 
-        <span>
-          © {new Date().getFullYear()}
-        </span>
+
+      {/* =====================================================
+          APPROACH
+      ===================================================== */}
+
+      <section className="nm-section nm-section-blue">
+
+        <div className="nm-container">
+
+          <div className="nm-home-section-heading">
+
+            <div>
+
+              <p className="nm-eyebrow">
+                💡 OUR APPROACH
+              </p>
+
+              <h2 className="nm-title">
+                More than a result.
+                <br />
+                <em>A clearer conversation.</em>
+              </h2>
+
+            </div>
+
+            <p className="nm-subtitle">
+              NeuroMatrix is designed to make self-reflection
+              useful. The goal isn't to tell you who you are
+              or what you must become — it's to help you ask
+              better questions about what comes next.
+            </p>
+
+          </div>
+
+
+          <div className="nm-about-principles">
+
+            <article className="nm-card">
+
+              <div className="nm-card-icon">
+                🧠
+              </div>
+
+              <span className="nm-principle-label">
+                UNDERSTAND
+              </span>
+
+              <h3>
+                Start with yourself.
+              </h3>
+
+              <p>
+                Understand your patterns, interests,
+                preferences and strengths before making
+                an important decision.
+              </p>
+
+            </article>
+
+
+            <article className="nm-card">
+
+              <div className="nm-card-icon">
+                🔍
+              </div>
+
+              <span className="nm-principle-label">
+                EXPLORE
+              </span>
+
+              <h3>
+                Look beyond the obvious.
+              </h3>
+
+              <p>
+                Explore academic and career possibilities
+                with more context instead of choosing only
+                from familiar options.
+              </p>
+
+            </article>
+
+
+            <article className="nm-card">
+
+              <div className="nm-card-icon">
+                🚀
+              </div>
+
+              <span className="nm-principle-label">
+                MOVE FORWARD
+              </span>
+
+              <h3>
+                Turn insight into action.
+              </h3>
+
+              <p>
+                Use reflection as a starting point for
+                practical next steps that you can actually
+                explore.
+              </p>
+
+            </article>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      {/* =====================================================
+          CREDENTIALS
+      ===================================================== */}
+
+      <section className="nm-section nm-section-light">
+
+        <div className="nm-container">
+
+          <div className="nm-about-credentials">
+
+            <div className="nm-about-credentials-heading">
+
+              <p className="nm-eyebrow">
+                🎓 BACKGROUND
+              </p>
+
+              <h2 className="nm-title">
+                A multidisciplinary
+                <br />
+                <em>perspective.</em>
+              </h2>
+
+              <p>
+                A combination of academic knowledge,
+                psychological training and counselling
+                experience supports the NeuroMatrix approach.
+              </p>
+
+            </div>
+
+
+            <div className="nm-credentials-grid">
+
+              <div className="nm-credential">
+
+                <span>🎓</span>
+
+                <small>
+                  ACADEMIC
+                </small>
+
+                <strong>
+                  M.Sc. · M.A. Psychology · D.Lit.
+                </strong>
+
+              </div>
+
+
+              <div className="nm-credential">
+
+                <span>📖</span>
+
+                <small>
+                  ADDITIONAL
+                </small>
+
+                <strong>
+                  M.Phil. · B.Ed.
+                </strong>
+
+              </div>
+
+
+              <div className="nm-credential">
+
+                <span>🧠</span>
+
+                <small>
+                  ASSESSMENT
+                </small>
+
+                <strong>
+                  Diploma in Psychological Assessment
+                </strong>
+
+              </div>
+
+
+              <div className="nm-credential">
+
+                <span>🎯</span>
+
+                <small>
+                  COUNSELLING
+                </small>
+
+                <strong>
+                  Career & Educational Counselling Training
+                </strong>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+       {/* =====================================================
+          FOOTER
+      ===================================================== */}
+
+      <footer className="nm-home-footer">
+
+        <div className="nm-container">
+
+          <div className="nm-footer-brand">
+
+            <strong>
+              NEUROMATRIX
+            </strong>
+
+            <span>
+              PATHWAYS · STUDENT ASSESSMENT PLATFORM
+            </span>
+
+          </div>
+
+
+          <div className="nm-footer-links">
+
+            <Link to="/">
+              Home
+            </Link>
+
+            <Link to="/why-counselling">
+              Why Counselling
+            </Link>
+
+            <Link to="/insights">
+              Insights
+            </Link>
+
+            <Link to="/services">
+              Services
+            </Link>
+
+            <Link to="/contact">
+              Contact
+            </Link>
+
+          </div>
+
+        </div>
 
       </footer>
 

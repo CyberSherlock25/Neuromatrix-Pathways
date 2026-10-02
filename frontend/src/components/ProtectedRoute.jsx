@@ -9,8 +9,9 @@ function ProtectedRoute({ children }) {
 
   if (loading) {
     return (
-      <div>
-        Loading...
+      <div className="route-loading">
+        <div className="route-loading-spinner" />
+        <span>Loading...</span>
       </div>
     );
   }

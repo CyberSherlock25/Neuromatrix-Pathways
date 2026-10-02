@@ -3,484 +3,430 @@ import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import "../styles/editorial.css";
 
-const services = [
+const counsellingPackages = {
+  "Grades 8–10": [
+    {
+      title: "Counselling Package",
+      description: "A focused counselling experience for students exploring their academic and career direction.",
+      features: [
+        "Login access for self-research tools",
+        "Mailers on courses or careers",
+        "Two counselling sessions of 1 hour each",
+        "Psychometric testing for personality and aptitude",
+      ],
+      price: "Contact us",
+    },
+    {
+      title: "Assessment & Counselling Package",
+      description: "Assessment-led counselling for deeper understanding of interests, personality and aptitude.",
+      features: [
+        "Login access for self-research tools",
+        "Mailers on courses or careers",
+        "Three counselling sessions of 1 hour each",
+        "Psychometric testing for personality and aptitude",
+        "Detailed report and analysis with career indications",
+      ],
+      price: "Contact us",
+    },
+    {
+      title: "India Complete Package (UG)",
+      description: "A complete undergraduate pathway covering counselling, college exploration and admission guidance.",
+      features: [
+        "Login access for self-research tools",
+        "Mailers on courses or careers",
+        "5–6 counselling sessions a year",
+        "Guidance on admission test process",
+        "Shortlisting colleges (Best-fit, Safe-fit)",
+        "Personal portfolio and resume guidance",
+      ],
+      price: "Contact us",
+    },
+    {
+      title: "International Complete Package",
+      description: "End-to-end international education guidance for students planning undergraduate study abroad.",
+      features: [
+        "Login access to research tools",
+        "Mailers on courses or careers",
+        "5–6 counselling sessions a year",
+        "College shortlisting (Best-fit, Safe-fit)",
+        "SOP/Essay, LOR & CV guidance",
+        "SAT/IELTS/TOEFL guidance",
+        "Scholarship & visa support",
+      ],
+      price: "Contact us",
+    },
+    {
+      title: "International Complete Package (UG)",
+      description: "A structured international undergraduate pathway with application and admissions support.",
+      features: [
+        "Login access to research tools",
+        "Mailers on courses or careers",
+        "5–6 counselling sessions a year",
+        "College shortlisting (Best-fit, Safe-fit)",
+        "SOP/Essay, LOR & CV guidance",
+        "SAT/IELTS/TOEFL guidance",
+        "Scholarship & visa support",
+      ],
+      price: "Contact us",
+    },
+  ],
+
+  "Grades 11–12": [
+    {
+      title: "Counselling Package",
+      description: "Focused counselling to help students navigate subject, course and career decisions.",
+      features: [
+        "Login access to self-research tools",
+        "Mailers on courses or careers",
+        "Two counselling sessions of 1 hour each",
+        "Psychometric testing for personality and aptitude",
+      ],
+      price: "Contact us",
+    },
+    {
+      title: "Assessment & Counselling Package",
+      description: "A deeper assessment and counselling pathway with detailed career analysis.",
+      features: [
+        "Login access to self-research tools",
+        "Mailers on courses or careers",
+        "Three counselling sessions of 1 hour each",
+        "Psychometric testing for personality and aptitude",
+        "Detailed report and analysis",
+      ],
+      price: "Contact us",
+    },
+  ],
+};
+
+const guidancePrograms = [
   {
-    number: "01",
-    title: "Career Counselling",
-    short:
-      "Personalised guidance to help students understand their interests, strengths and possible academic or career directions.",
-    details: [
-      "Understanding interests and strengths",
-      "Exploring academic pathways",
-      "Career direction and planning",
-      "Personalised one-to-one guidance",
+    title: "Smart Apply",
+    tag: "End-to-End Admissions",
+    price: "Contact us",
+    recommended: true,
+    features: [
+      "University shortlisting & overall guidance",
+      "Admission process & test guidance",
+      "SOP & essay drafting support",
+      "Application & VISA document guidance",
+      "Application filing for up to 8 universities",
+      "Tracking university decisions — selections & rejections",
+      "Support in final university selection",
+      "Complete VISA processing & interview preparation",
     ],
   },
   {
-    number: "02",
-    title: "Psychological Assessment",
-    short:
-      "Structured assessment designed to help students understand their patterns, preferences and individual characteristics.",
-    details: [
-      "Structured psychological assessment",
-      "Interest and preference exploration",
-      "Understanding individual patterns",
-      "Assessment-based discussion",
+    title: "Promap",
+    price: "₹23,600/-",
+    features: [
+      "2 Psychometric tests with detailed analysis",
+      "3 fixed counselling sessions",
+      "Personalized CV roadmap (courses, activities & books)",
+      "Combination of free & paid learning programs",
+      "Interaction with alumni for real-life insights",
+      "Peer interaction with like-minded students",
+      "Interview tips & SOP writing session",
+      "CV generation",
+      "50 days structured program",
     ],
   },
   {
-    number: "03",
-    title: "Educational Guidance",
-    short:
-      "Support for students navigating important educational decisions and trying to understand which direction fits them.",
-    details: [
-      "Subject and stream exploration",
-      "Academic decision support",
-      "Understanding educational options",
-      "Planning the next stage",
+    title: "GEM India",
+    price: "₹27,140/-",
+    features: [
+      "Under the Indian colleges admission guidance service",
+      "Guidance based on aptitude and interest",
+      "College options based on the student's profile",
+      "Exhaustive college shortlist",
+      "Admission process guidance",
+      "Application timeline guidance",
+      "Test guidance wherever applicable",
+      "SOP guidance wherever applicable",
+      "Coaching institute details",
+      "Final university selection support",
     ],
-  },
-  {
-    number: "04",
-    title: "Student Development",
-    short:
-      "A reflective approach that helps students develop greater self-awareness and confidence around their decisions.",
-    details: [
-      "Self-awareness",
-      "Strength identification",
-      "Decision-making reflection",
-      "Personal development",
-    ],
+    note: "We will fill applications only for Ashoka and FLAME University (and similar). For other colleges, application links will be shared for you to complete.",
   },
 ];
 
-function Services() {
-  const [openService, setOpenService] = useState(null);
-
-  const toggleService = (index) => {
-    setOpenService(openService === index ? null : index);
-  };
+function FlipCard({ item }) {
+  const [flipped, setFlipped] = useState(false);
 
   return (
-    <div className="nm-page services-page">
+    <div
+      className={`service-flip-card ${flipped ? "is-flipped" : ""}`}
+      onClick={() => setFlipped(!flipped)}
+    >
+      <div className="service-flip-inner">
+
+        {/* FRONT */}
+        <div className="service-card-face service-card-front">
+
+          {item.recommended && (
+            <span className="service-recommended">
+              Recommended
+            </span>
+          )}
+
+          <div className="service-card-icon">
+            ✦
+          </div>
+
+          <h3>{item.title}</h3>
+
+          {item.tag && (
+            <span className="service-card-tag">
+              {item.tag}
+            </span>
+          )}
+
+          <p className="service-card-description">
+            {item.description}
+          </p>
+
+          <div className="service-feature-preview">
+            {item.features.slice(0, 4).map((feature, index) => (
+              <div key={index}>
+                <span>✓</span>
+                <p>{feature}</p>
+              </div>
+            ))}
+          </div>
+
+          <span className="flip-hint">
+            Click to view package →
+          </span>
+
+        </div>
+
+
+        {/* BACK */}
+        <div className="service-card-face service-card-back">
+
+          <span className="back-label">
+            YOUR PATHWAY
+          </span>
+
+          <h3>{item.title}</h3>
+
+          <div className="service-price">
+            {item.price}
+          </div>
+
+          <div className="back-features">
+            {item.features.map((feature, index) => (
+              <div key={index}>
+                <span>✓</span>
+                <p>{feature}</p>
+              </div>
+            ))}
+          </div>
+
+          {item.note && (
+            <div className="service-note">
+              <strong>Note</strong>
+              <p>{item.note}</p>
+            </div>
+          )}
+
+          <Link
+            to="/contact"
+            className="service-card-button"
+            onClick={(e) => e.stopPropagation()}
+          >
+            Enquire Now →
+          </Link>
+
+          <span className="flip-hint">
+            Click to flip back
+          </span>
+
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+
+export default function Services() {
+  const [grade, setGrade] = useState("Grades 8–10");
+
+  return (
+    <div className="services-page">
 
       <Navbar />
 
-      <main>
+      {/* ================= HERO ================= */}
 
-        {/* =====================================================
-            HERO
-        ===================================================== */}
+      <section className="services-hero">
 
-        <section className="services-hero">
+        <div className="services-hero-content">
 
-          <div className="services-hero-inner">
+          <span className="services-eyebrow">
+            NEUROMATRIX / SERVICES
+          </span>
 
-            <div className="services-hero-content">
+          <h1>
+            Guidance designed
+            <br />
+            around <em>your pathway.</em>
+          </h1>
 
-              <span className="nm-page-kicker">
-                NEUROMATRIX / SERVICES
-              </span>
+          <p>
+            Explore counselling, assessment and guidance programs
+            designed to help students make clearer academic,
+            career and education decisions.
+          </p>
 
-              <h1 className="services-hero-title">
-                Guidance for
-                <br />
-                <em>where you are.</em>
-              </h1>
+        </div>
 
-              <p className="services-hero-description">
-                Thoughtful assessment, counselling and educational
-                guidance designed to help students understand
-                themselves and move forward with greater clarity.
-              </p>
+        <div className="services-hero-orbit">
+          <span>✦</span>
+          <span>◎</span>
+          <span>◇</span>
+        </div>
 
-              <div className="services-hero-actions">
+      </section>
 
-                <Link
-                  to="/signup"
-                  className="nm-button nm-button-primary"
-                >
-                  START ASSESSMENT
-                  <span>→</span>
-                </Link>
 
-                <Link
-                  to="/contact"
-                  className="nm-button nm-button-outline"
-                >
-                  TALK TO US
-                </Link>
+      {/* ================= COUNSELLING ================= */}
 
-              </div>
+      <section className="counselling-packages">
 
-            </div>
+        <div className="services-heading">
 
+          <span className="services-small-label">
+            COUNSELLING PACKAGES
+          </span>
 
-            {/* VISUAL */}
+          <h2>
+            Choose the support
+            <br />
+            <em>that fits your stage.</em>
+          </h2>
 
-            <div className="services-hero-visual">
-
-              <div className="services-orbit orbit-a" />
-              <div className="services-orbit orbit-b" />
-              <div className="services-orbit orbit-c" />
-
-              <div className="services-visual-core">
-
-                <span>NM</span>
-
-                <strong>
-                  YOUR
-                  <br />
-                  PATH
-                </strong>
-
-              </div>
-
-              <span className="services-visual-note">
-                UNDERSTAND · EXPLORE · MOVE FORWARD
-              </span>
-
-            </div>
-
-          </div>
-
-        </section>
-
-
-        {/* =====================================================
-            INTRO
-        ===================================================== */}
-
-        <section className="nm-section services-intro">
-
-          <div className="nm-section-header">
-
-            <div>
-
-              <span className="nm-section-label">
-                WHAT WE OFFER
-              </span>
-
-              <h2 className="nm-section-title">
-                More than an answer.
-                <br />
-                <em>A clearer direction.</em>
-              </h2>
-
-            </div>
-
-            <p className="nm-section-intro">
-              Every student arrives with a different question.
-              Our services are designed to create space for
-              understanding before making important decisions.
-            </p>
-
-          </div>
-
-        </section>
-
-
-        {/* =====================================================
-            SERVICES
-        ===================================================== */}
-
-        <section className="nm-section services-list-section">
-
-          <div className="services-list">
-
-            {services.map((service, index) => {
-
-              const isOpen = openService === index;
-
-              return (
-                <article
-                  className={`service-item ${
-                    isOpen ? "is-open" : ""
-                  }`}
-                  key={service.number}
-                >
-
-                  <button
-                    type="button"
-                    className="service-item-header"
-                    onClick={() => toggleService(index)}
-                    aria-expanded={isOpen}
-                  >
-
-                    <span className="service-number">
-                      {service.number}
-                    </span>
-
-                    <h3>
-                      {service.title}
-                    </h3>
-
-                    <span className="service-toggle">
-                      {isOpen ? "−" : "+"}
-                    </span>
-
-                  </button>
-
-
-                  <div className="service-item-content">
-
-                    <div className="service-item-description">
-
-                      <p>
-                        {service.short}
-                      </p>
-
-                    </div>
-
-
-                    <div className="service-details">
-
-                      <span>
-                        WHAT'S INCLUDED
-                      </span>
-
-                      <ul>
-                        {service.details.map((detail) => (
-                          <li key={detail}>
-                            <span>+</span>
-                            {detail}
-                          </li>
-                        ))}
-                      </ul>
-
-                    </div>
-
-                  </div>
-
-                </article>
-              );
-            })}
-
-          </div>
-
-        </section>
-
-
-        {/* =====================================================
-            HOW IT WORKS
-        ===================================================== */}
-
-        <section className="nm-section nm-section-soft services-process">
-
-          <div className="nm-section-header">
-
-            <div>
-
-              <span className="nm-section-label">
-                THE PROCESS
-              </span>
-
-              <h2 className="nm-section-title">
-                A thoughtful process
-                <br />
-                <em>from question to clarity.</em>
-              </h2>
-
-            </div>
-
-            <p className="nm-section-intro">
-              The goal isn't to tell you who you should become.
-              It is to help you understand your possibilities
-              well enough to explore them confidently.
-            </p>
-
-          </div>
-
-
-          <div className="services-process-grid">
-
-            <article>
-
-              <span>01</span>
-
-              <h3>
-                Understand
-              </h3>
-
-              <p>
-                Begin with your context, experiences, interests
-                and the questions you are trying to answer.
-              </p>
-
-            </article>
-
-
-            <article>
-
-              <span>02</span>
-
-              <h3>
-                Assess
-              </h3>
-
-              <p>
-                Use structured reflection and assessment to
-                identify meaningful patterns.
-              </p>
-
-            </article>
-
-
-            <article>
-
-              <span>03</span>
-
-              <h3>
-                Explore
-              </h3>
-
-              <p>
-                Connect what you learn about yourself with
-                possible educational and career directions.
-              </p>
-
-            </article>
-
-
-            <article>
-
-              <span>04</span>
-
-              <h3>
-                Move Forward
-              </h3>
-
-              <p>
-                Turn insight into practical next steps that
-                you can explore at your own pace.
-              </p>
-
-            </article>
-
-          </div>
-
-        </section>
-
-
-        {/* =====================================================
-            ASSESSMENT CTA
-        ===================================================== */}
-
-        <section className="services-assessment-section">
-
-          <div className="services-assessment-content">
-
-            <span className="services-cta-label">
-              READY TO BEGIN?
-            </span>
-
-            <h2>
-              Start with
-              <br />
-              <em>understanding yourself.</em>
-            </h2>
-
-            <p>
-              Take the first step toward understanding your
-              strengths, preferences and possible pathways.
-            </p>
-
-          </div>
-
-
-          <div className="services-assessment-action">
-
-            <Link
-              to="/signup"
-              className="nm-button nm-button-light"
-            >
-              START YOUR ASSESSMENT
-              <span>→</span>
-            </Link>
-
-          </div>
-
-        </section>
-
-      </main>
-
-
-      {/* =====================================================
-          FOOTER
-      ===================================================== */}
-
-      <footer className="nm-footer services-footer">
-
-        <div className="services-footer-top">
-
-          <div>
-
-            <Link
-              to="/"
-              className="services-footer-brand"
-            >
-              NEUROMATRIX
-              <span>
-                PATHWAYS
-              </span>
-            </Link>
-
-            <p>
-              Understand yourself.
-              <br />
-              Choose your direction.
-            </p>
-
-          </div>
-
-
-          <div className="services-footer-links">
-
-            <span>
-              EXPLORE
-            </span>
-
-            <Link to="/">
-              HOME
-            </Link>
-
-            <Link to="/about">
-              ABOUT
-            </Link>
-
-            <Link to="/why-counselling">
-              WHY COUNSELLING
-            </Link>
-
-            <Link to="/insights">
-              INSIGHTS
-            </Link>
-
-            <Link to="/contact">
-              CONTACT
-            </Link>
-
-          </div>
+          <p>
+            Comprehensive plans tailored for students at different
+            stages of academic and career exploration.
+          </p>
 
         </div>
 
 
-        <div className="services-footer-bottom">
+        {/* GRADE SWITCH */}
 
-          <span>
-            © {new Date().getFullYear()} NeuroMatrix Pathways
-          </span>
+        <div className="grade-switch">
 
-          <span>
-            STUDENT ASSESSMENT &amp; GUIDANCE PLATFORM
-          </span>
+          <button
+            className={grade === "Grades 8–10" ? "active" : ""}
+            onClick={() => setGrade("Grades 8–10")}
+          >
+            Grades 8–10
+          </button>
+
+          <button
+            className={grade === "Grades 11–12" ? "active" : ""}
+            onClick={() => setGrade("Grades 11–12")}
+          >
+            Grades 11–12
+          </button>
 
         </div>
+
+
+        <div className="services-card-grid">
+
+          {counsellingPackages[grade].map((item, index) => (
+            <FlipCard
+              item={item}
+              key={`${grade}-${index}`}
+            />
+          ))}
+
+        </div>
+
+      </section>
+
+
+      {/* ================= GUIDANCE ================= */}
+
+      <section className="guidance-programs">
+
+        <div className="services-heading centered">
+
+          <span className="services-small-label">
+            GUIDANCE PROGRAMS
+          </span>
+
+          <h2>
+            More support.
+            <br />
+            <em>More direction.</em>
+          </h2>
+
+          <p>
+            For students who need more structured support through
+            admissions, applications and future planning.
+          </p>
+
+        </div>
+
+
+        <div className="services-card-grid guidance-grid">
+
+          {guidancePrograms.map((item, index) => (
+            <FlipCard
+              item={item}
+              key={index}
+            />
+          ))}
+
+        </div>
+
+      </section>
+
+
+      {/* ================= CTA ================= */}
+
+      <section className="services-cta">
+
+        <div>
+
+          <span>
+            NOT SURE WHAT FITS?
+          </span>
+
+          <h2>
+            Let's find the
+            <br />
+            right <em>pathway.</em>
+          </h2>
+
+        </div>
+
+        <Link to="/contact">
+          TALK TO OUR TEAM →
+        </Link>
+
+      </section>
+
+
+      {/* ================= FOOTER ================= */}
+
+      <footer className="services-footer">
+
+        <strong>
+          NEUROMATRIX PATHWAYS
+        </strong>
+
+        <span>
+          Helping students understand,
+          explore and move forward.
+        </span>
 
       </footer>
 
     </div>
   );
 }
-
-export default Services;
