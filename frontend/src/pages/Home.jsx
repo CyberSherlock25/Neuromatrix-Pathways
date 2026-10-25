@@ -1,162 +1,341 @@
 import { Link } from "react-router-dom";
-import "../App.css";
+import Navbar from "../components/Navbar";
+import { useAuth } from "../context/AuthContext";
 
 function Home() {
+  const { isAuthenticated } = useAuth();
+
+  /*
+   * Keep the original landing page exactly as it is.
+   *
+   * Only the destination of assessment buttons changes:
+   *
+   * Logged out  -> Signup
+   * Logged in   -> Actual assessment questions
+   */
+  const assessmentPath = isAuthenticated
+    ? "/assessment/questions"
+    : "/signup";
+
   return (
-    <div className="home-page">
-
-      {/* ================= NAVBAR ================= */}
-      <nav className="navbar">
-
-        <Link to="/" className="brand">
-          <span className="brand-main">NeuroMatrix</span>
-          <span className="brand-sub">Pathways</span>
-        </Link>
-
-        <div className="nav-links">
-          <a href="#how-it-works">How It Works</a>
-          <a href="#discover">Discover</a>
-          <a href="#about">About</a>
-
-          <Link to="/login" className="nav-login">
-            Login
-          </Link>
-
-          <Link to="/signup" className="nav-get-started">
-            Get Started
-          </Link>
-        </div>
-
-      </nav>
-
+    <div className="nm-home">
+      <Navbar />
 
       {/* ================= HERO ================= */}
-      <section className="hero">
 
-        <div className="hero-content">
+      <section className="landing-hero">
+        <div className="landing-hero-content">
 
-          <div className="hero-eyebrow">
-            <span className="eyebrow-dot"></span>
-            DISCOVER YOUR POTENTIAL
-          </div>
+          <span className="editorial-eyebrow">
+            🧠 ASSESSMENT • CLARITY • SELF-DISCOVERY
+          </span>
 
           <h1>
-            Understand
+            Understand your strengths.
             <br />
-            <span>Yourself.</span>
-            <br />
-            Discover Your
-            <br />
-            <strong>Path.</strong>
+            <em>Choose your direction.</em>
           </h1>
 
-          <p className="hero-description">
-            NeuroMatrix Pathways helps students understand
-            their strengths, interests and preferences through
-            structured assessments designed for their stage
-            of education.
+          <p className="landing-description">
+            NeuroMatrix Pathways helps students turn honest
+            self-reflection into clearer academic and career
+            possibilities.
           </p>
 
-          <div className="hero-actions">
+          <div className="landing-actions">
 
             <Link
-              to="/signup"
-              className="hero-primary-btn"
+              to={assessmentPath}
+              className="nm-button nm-button-primary"
             >
-              Take Assessment
-              <span>→</span>
+              START YOUR ASSESSMENT →
             </Link>
 
-            <a
-              href="#how-it-works"
-              className="hero-secondary-btn"
+            <Link
+              to="/about"
+              className="nm-button nm-button-outline"
             >
-              Learn How It Works
-            </a>
+              DISCOVER NEUROMATRIX
+            </Link>
 
           </div>
 
-          <div className="hero-trust">
+          <div className="editorial-trust">
 
-            <div className="trust-item">
-              <span className="trust-icon">✓</span>
-              <span>Student-focused</span>
-            </div>
+            <span>🔬 EVIDENCE-INFORMED</span>
 
-            <div className="trust-item">
-              <span className="trust-icon">✓</span>
-              <span>Structured assessment</span>
-            </div>
+            <span>•</span>
 
-            <div className="trust-item">
-              <span className="trust-icon">✓</span>
-              <span>Personalized insights</span>
-            </div>
+            <span>🎓 STUDENT-FIRST</span>
+
+            <span>•</span>
+
+            <span>🔒 PRIVATE &amp; SECURE</span>
 
           </div>
 
         </div>
 
 
-        {/* ================= HERO VISUAL ================= */}
+        <div className="landing-hero-visual">
 
-        <div className="hero-visual">
+          <div className="landing-visual-card">
 
-          <div className="visual-glow"></div>
+            <span className="landing-visual-label">
+              YOUR PATHWAY
+            </span>
 
-          <div className="pathway-orbit orbit-one"></div>
-          <div className="pathway-orbit orbit-two"></div>
-          <div className="pathway-orbit orbit-three"></div>
+            <div className="landing-orbit orbit-one" />
+            <div className="landing-orbit orbit-two" />
+            <div className="landing-orbit orbit-three" />
 
-          <div className="visual-center">
+            <div className="landing-core">
 
-            <div className="brain-symbol">
-              ◈
+              <span className="editorial-mark">
+                ✦
+              </span>
+
+              <strong>
+                NEURO
+                <br />
+                <em>MATRIX</em>
+              </strong>
+
             </div>
-
-            <span>NEUROMATRIX</span>
-
-            <strong>
-              YOUR PATH
-            </strong>
 
           </div>
 
 
-          <div className="floating-card card-top">
+          <div className="landing-floating-card">
 
-            <div className="mini-icon">✦</div>
+            <span className="nm-card-icon">
+              🧭
+            </span>
 
             <div>
-              <small>DISCOVER</small>
-              <strong>Your Strengths</strong>
+              <strong>
+                A clearer direction
+              </strong>
+
+              <small>
+                Discover what fits your interests,
+                strengths and aspirations.
+              </small>
             </div>
 
           </div>
 
+        </div>
 
-          <div className="floating-card card-right">
+      </section>
 
-            <div className="mini-icon">⌁</div>
 
-            <div>
-              <small>EXPLORE</small>
-              <strong>Your Interests</strong>
-            </div>
+      {/* ================= WHY NEUROMATRIX ================= */}
+
+      <section className="home-understanding nm-pattern">
+
+        <div className="home-section-heading">
+
+          <div>
+
+            <span>
+              🧭 WHY NEUROMATRIX
+            </span>
+
+            <h2>
+              Your next step starts with
+              <br />
+              <em>understanding.</em>
+            </h2>
 
           </div>
 
+          <p>
+            Choosing what comes next can feel overwhelming.
+            NeuroMatrix gives students a structured space to
+            pause, reflect and understand themselves before
+            making important academic and career decisions.
+          </p>
 
-          <div className="floating-card card-bottom">
+        </div>
 
-            <div className="mini-icon">↗</div>
 
-            <div>
-              <small>FIND</small>
-              <strong>Your Pathways</strong>
+        <div className="home-feature-grid">
+
+          <article className="nm-card home-feature-card">
+
+            <div className="nm-card-icon">
+              🧭
             </div>
 
+            <h3>
+              Find Your Direction
+            </h3>
+
+            <p>
+              Turn uncertainty into a clearer understanding
+              of possible academic and career pathways.
+            </p>
+
+          </article>
+
+
+          <article className="nm-card home-feature-card">
+
+            <div className="nm-card-icon">
+              🧠
+            </div>
+
+            <h3>
+              Understand Yourself
+            </h3>
+
+            <p>
+              Reflect on your interests, strengths,
+              preferences and learning patterns.
+            </p>
+
+          </article>
+
+
+          <article className="nm-card home-feature-card">
+
+            <div className="nm-card-icon">
+              🚀
+            </div>
+
+            <h3>
+              Plan Your Next Step
+            </h3>
+
+            <p>
+              Use your insights as a starting point for
+              meaningful conversations and decisions.
+            </p>
+
+          </article>
+
+        </div>
+
+      </section>
+
+
+      {/* ================= ASSESSMENTS ================= */}
+
+      <section className="home-assessments">
+
+        <div className="home-section-heading">
+
+          <div>
+
+            <span>
+              🎯 ASSESSMENTS
+            </span>
+
+            <h2>
+              Explore where your
+              <br />
+              <em>strengths can lead.</em>
+            </h2>
+
           </div>
+
+          <p>
+            Start with an assessment designed around
+            reflection, interests and personal patterns.
+          </p>
+
+        </div>
+
+
+        <div className="home-assessment-grid">
+
+          <article className="nm-card home-assessment-card">
+
+            <div className="nm-card-icon">
+              🧠
+            </div>
+
+            <h3>
+              Science Stream Fit
+            </h3>
+
+            <p>
+              Explore your curiosity, analytical thinking
+              and problem-solving style.
+            </p>
+
+            <Link to={assessmentPath}>
+              EXPLORE <span>→</span>
+            </Link>
+
+          </article>
+
+
+          <article className="nm-card home-assessment-card">
+
+            <div className="nm-card-icon">
+              📊
+            </div>
+
+            <h3>
+              Commerce Stream Fit
+            </h3>
+
+            <p>
+              Understand how your strengths, interests
+              and people skills connect.
+            </p>
+
+            <Link to={assessmentPath}>
+              EXPLORE <span>→</span>
+            </Link>
+
+          </article>
+
+
+          <article className="nm-card home-assessment-card">
+
+            <div className="nm-card-icon">
+              ⚙️
+            </div>
+
+            <h3>
+              Engineering Pathway
+            </h3>
+
+            <p>
+              Explore systems thinking, persistence
+              and your approach to solving problems.
+            </p>
+
+            <Link to={assessmentPath}>
+              EXPLORE <span>→</span>
+            </Link>
+
+          </article>
+
+
+          <article className="nm-card home-assessment-card">
+
+            <div className="nm-card-icon">
+              🎨
+            </div>
+
+            <h3>
+              Creative Pathway
+            </h3>
+
+            <p>
+              Discover how imagination, visual thinking
+              and creativity can shape your direction.
+            </p>
+
+            <Link to={assessmentPath}>
+              EXPLORE <span>→</span>
+            </Link>
+
+          </article>
 
         </div>
 
@@ -165,244 +344,153 @@ function Home() {
 
       {/* ================= HOW IT WORKS ================= */}
 
-      <section
-        id="how-it-works"
-        className="how-section"
-      >
+      <section className="home-process nm-pattern">
 
-        <div className="section-heading">
+        <div className="home-section-heading">
 
-          <div className="section-eyebrow">
-            THE NEUROMATRIX JOURNEY
+          <div>
+
+            <span>
+              ✨ HOW IT WORKS
+            </span>
+
+            <h2>
+              Simple steps.
+              <br />
+              <em>Meaningful insight.</em>
+            </h2>
+
           </div>
 
-          <h2>
-            A better way to
-            <span> understand yourself.</span>
-          </h2>
-
           <p>
-            Your journey begins with understanding where
-            you are today and discovering possibilities
-            for where you could go tomorrow.
+            A simple journey from reflection to exploration
+            and practical next steps.
           </p>
 
         </div>
 
 
-        <div className="journey-grid">
+        <div className="home-process-grid">
 
-          <div className="journey-card">
+          <article className="home-process-card">
 
-            <div className="journey-number">
-              01
+            <div className="home-process-icon">
+              📝
             </div>
 
-            <div className="journey-icon">
-              ◉
+            <div>
+
+              <span>
+                REFLECT
+              </span>
+
+              <h3>
+                Start with yourself.
+              </h3>
+
+              <p>
+                Answer thoughtfully designed questions
+                based on your experiences and preferences.
+              </p>
+
             </div>
 
-            <h3>
-              Create Your Profile
-            </h3>
-
-            <p>
-              Tell us about yourself and your current
-              stage of education.
-            </p>
-
-          </div>
+          </article>
 
 
-          <div className="journey-card">
+          <article className="home-process-card">
 
-            <div className="journey-number">
-              02
+            <div className="home-process-icon">
+              🧠
             </div>
 
-            <div className="journey-icon">
-              ◌
+            <div>
+
+              <span>
+                UNDERSTAND
+              </span>
+
+              <h3>
+                Recognise your patterns.
+              </h3>
+
+              <p>
+                Identify patterns in your interests,
+                preferences and personal strengths.
+              </p>
+
             </div>
 
-            <h3>
-              Take Your Assessment
-            </h3>
-
-            <p>
-              Answer carefully designed statements using
-              a simple response scale.
-            </p>
-
-          </div>
+          </article>
 
 
-          <div className="journey-card">
+          <article className="home-process-card">
 
-            <div className="journey-number">
-              03
+            <div className="home-process-icon">
+              🚀
             </div>
 
-            <div className="journey-icon">
-              ↗
+            <div>
+
+              <span>
+                EXPLORE
+              </span>
+
+              <h3>
+                Look ahead with clarity.
+              </h3>
+
+              <p>
+                Use your insights to explore possible
+                academic and career directions.
+              </p>
+
             </div>
 
-            <h3>
-              Discover Your Path
-            </h3>
-
-            <p>
-              Gain meaningful insights that can help
-              you think about your future.
-            </p>
-
-          </div>
+          </article>
 
         </div>
 
       </section>
 
 
-      {/* ================= DISCOVER ================= */}
+      {/* ================= FINAL CTA ================= */}
 
-      <section
-        id="discover"
-        className="discover-section"
-      >
-
-        <div className="discover-content">
-
-          <div className="section-eyebrow">
-            BEYOND THE CLASSROOM
-          </div>
-
-          <h2>
-            You're more than
-            <br />
-            <span>just your marks.</span>
-          </h2>
-
-          <p>
-            Every student has a unique combination of
-            interests, preferences, strengths and ways
-            of thinking.
-          </p>
-
-          <p>
-            NeuroMatrix Pathways is designed to help you
-            explore those dimensions and understand
-            yourself more clearly.
-          </p>
-
-          <Link
-            to="/signup"
-            className="discover-btn"
-          >
-            Begin Your Journey
-            <span>→</span>
-          </Link>
-
-        </div>
-
-
-        <div className="discover-visual">
-
-          <div className="dimension dimension-one">
-            <span>01</span>
-            <strong>Interests</strong>
-          </div>
-
-          <div className="dimension dimension-two">
-            <span>02</span>
-            <strong>Preferences</strong>
-          </div>
-
-          <div className="dimension dimension-three">
-            <span>03</span>
-            <strong>Strengths</strong>
-          </div>
-
-          <div className="dimension dimension-four">
-            <span>04</span>
-            <strong>Personality</strong>
-          </div>
-
-          <div className="dimension-center">
-            <span>YOU</span>
-          </div>
-
-        </div>
-
-      </section>
-
-
-      {/* ================= ABOUT ================= */}
-
-      <section
-        id="about"
-        className="about-section"
-      >
-
-        <div className="about-heading">
-
-          <div className="section-eyebrow">
-            WHY NEUROMATRIX
-          </div>
-
-          <h2>
-            Your future deserves
-            <span> more than a guess.</span>
-          </h2>
-
-        </div>
-
-        <div className="about-text">
-
-          <p>
-            Choosing what to study or what direction to
-            take can be difficult. NeuroMatrix Pathways
-            aims to make that journey more thoughtful,
-            structured and personal.
-          </p>
-
-          <Link
-            to="/signup"
-            className="text-link"
-          >
-            Start exploring →
-          </Link>
-
-        </div>
-
-      </section>
-
-
-      {/* ================= CTA ================= */}
-
-      <section className="final-cta">
+      <section className="home-final-cta">
 
         <div>
 
-          <div className="section-eyebrow">
-            YOUR JOURNEY STARTS HERE
-          </div>
+          <span>
+            🌱 YOUR NEXT STEP
+          </span>
 
           <h2>
-            Ready to discover
+            Start with
             <br />
-            <span>your path?</span>
+            <em>curiosity.</em>
           </h2>
 
           <p>
-            Create your NeuroMatrix profile and begin
-            your journey of self-discovery.
+            You don't need to have everything figured out.
+            Start by understanding yourself.
           </p>
 
+        </div>
+
+        <div className="home-final-actions">
+
           <Link
-            to="/signup"
-            className="cta-button"
+            to={assessmentPath}
+            className="nm-button nm-button-primary"
           >
-            Get Started
-            <span>→</span>
+            START YOUR ASSESSMENT →
+          </Link>
+
+          <Link
+            to="/contact"
+            className="nm-button nm-button-outline"
+          >
+            TALK TO US
           </Link>
 
         </div>
@@ -412,43 +500,44 @@ function Home() {
 
       {/* ================= FOOTER ================= */}
 
-      <footer className="footer">
+      <footer className="landing-footer">
 
-        <div className="footer-brand">
+        <Link
+          to="/"
+          className="editorial-brand"
+        >
+          NEUROMATRIX PATHWAYS
+        </Link>
 
-          <Link to="/" className="brand footer-logo">
-            <span className="brand-main">
-              NeuroMatrix
-            </span>
 
-            <span className="brand-sub">
-              Pathways
-            </span>
+        <div className="landing-footer-links">
+
+          <Link to="/about">
+            ABOUT
           </Link>
 
-          <p>
-            Discover yourself. Understand your potential.
-          </p>
+          <Link to="/why-counselling">
+            WHY COUNSELLING
+          </Link>
+
+          <Link to="/insights">
+            INSIGHTS
+          </Link>
+
+          <Link to="/services">
+            SERVICES
+          </Link>
+
+          <Link to="/contact">
+            CONTACT
+          </Link>
 
         </div>
 
 
-        <div className="footer-links">
-
-          <div>
-            <h4>Explore</h4>
-            <a href="#how-it-works">How It Works</a>
-            <a href="#discover">Discover</a>
-            <a href="#about">About</a>
-          </div>
-
-          <div>
-            <h4>Account</h4>
-            <Link to="/login">Login</Link>
-            <Link to="/signup">Create Account</Link>
-          </div>
-
-        </div>
+        <span className="landing-footer-copy">
+          © {new Date().getFullYear()} NeuroMatrix Pathways
+        </span>
 
       </footer>
 

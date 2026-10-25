@@ -4517,4 +4517,39 @@ button {
   .completed-secondary-button {
     width: 100%;
   }
+}/* =========================================================
+   ROUTE LOADING
+   ========================================================= */
+
+.route-loading {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  background: #f7f9fa;
+  color: #526473;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.route-loading-spinner {
+  width: 20px;
+  height: 20px;
+
+  border: 2px solid rgba(11, 31, 51, 0.14);
+  border-top-color: #0b1f33;
+
+  border-radius: 50%;
+
+  animation: routeSpinner 0.7s linear infinite;
+}
+
+@keyframes routeSpinner {
+  to {
+    transform: rotate(360deg);
+  }
 }
